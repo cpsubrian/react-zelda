@@ -6,6 +6,7 @@
   "scripts": {
     "start": "npm run dev",
     "dev": "./node_modules/.bin/gulp",
+    "build-prod": "./node_modules/.bin/gulp build-prod",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "standard": {
