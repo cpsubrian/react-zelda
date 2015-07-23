@@ -209,11 +209,11 @@ a:hover {
 }
 @font-face {
   font-family: 'ganon';
-  src: url('/fonts/ReturnofGanon.ttf') format('truetype');
+  src: url('../fonts/ReturnofGanon.ttf') format('truetype');
 }
 @font-face {
   font-family: 'triforce';
-  src: url('/fonts/Triforce.ttf') format('truetype');
+  src: url('../fonts/Triforce.ttf') format('truetype');
 }
 body {
   font-family: ganon;
@@ -311,7 +311,7 @@ h6 {
   position: absolute;
   width: 16px;
   height: 16px;
-  background: url(/images/tiles/overworld.png) no-repeat;
+  background: url(../images/tiles/overworld.png) no-repeat;
   z-index: 0;
   transform: scale(1.01);
 }
@@ -335,7 +335,7 @@ h6 {
   position: absolute;
   width: 16px;
   height: 16px;
-  background: url(/images/tiles/overworld.png) no-repeat;
+  background: url(../images/tiles/overworld.png) no-repeat;
   z-index: 10;
 }
 .game-grid .game-grid-row .game-grid-overlay--water-below {
@@ -431,7 +431,7 @@ h6 {
   z-index: 100;
 }
 .hero .sprite {
-  background: url(/images/tiles/link.png) no-repeat;
+  background: url(../images/tiles/link.png) no-repeat;
 }
 .game {
   position: absolute;
