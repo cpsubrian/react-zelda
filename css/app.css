@@ -1,0 +1,454 @@
+/*! normalize.css v3.0.3 | MIT License | github.com/necolas/normalize.css */
+html {
+  font-family: sans-serif;
+  -ms-text-size-adjust: 100%;
+  -webkit-text-size-adjust: 100%;
+}
+body {
+  margin: 0;
+}
+article,
+aside,
+details,
+figcaption,
+figure,
+footer,
+header,
+hgroup,
+main,
+menu,
+nav,
+section,
+summary {
+  display: block;
+}
+audio,
+canvas,
+progress,
+video {
+  display: inline-block;
+  vertical-align: baseline;
+}
+audio:not([controls]) {
+  display: none;
+  height: 0;
+}
+[hidden],
+template {
+  display: none;
+}
+a {
+  background-color: transparent;
+}
+a:active,
+a:hover {
+  outline: 0;
+}
+abbr[title] {
+  border-bottom: 1px dotted;
+}
+b,
+strong {
+  font-weight: bold;
+}
+dfn {
+  font-style: italic;
+}
+h1 {
+  font-size: 2em;
+  margin: 0.67em 0;
+}
+mark {
+  background: #ff0;
+  color: #000;
+}
+small {
+  font-size: 80%;
+}
+sub,
+sup {
+  font-size: 75%;
+  line-height: 0;
+  position: relative;
+  vertical-align: baseline;
+}
+sup {
+  top: -0.5em;
+}
+sub {
+  bottom: -0.25em;
+}
+img {
+  border: 0;
+}
+svg:not(:root) {
+  overflow: hidden;
+}
+figure {
+  margin: 1em 40px;
+}
+hr {
+  box-sizing: content-box;
+  height: 0;
+}
+pre {
+  overflow: auto;
+}
+code,
+kbd,
+pre,
+samp {
+  font-family: monospace, monospace;
+  font-size: 1em;
+}
+button,
+input,
+optgroup,
+select,
+textarea {
+  color: inherit;
+  font: inherit;
+  margin: 0;
+}
+button {
+  overflow: visible;
+}
+button,
+select {
+  text-transform: none;
+}
+button,
+html input[type="button"],
+input[type="reset"],
+input[type="submit"] {
+  -webkit-appearance: button;
+  cursor: pointer;
+}
+button[disabled],
+html input[disabled] {
+  cursor: default;
+}
+button::-moz-focus-inner,
+input::-moz-focus-inner {
+  border: 0;
+  padding: 0;
+}
+input {
+  line-height: normal;
+}
+input[type="checkbox"],
+input[type="radio"] {
+  box-sizing: border-box;
+  padding: 0;
+}
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  height: auto;
+}
+input[type="search"] {
+  -webkit-appearance: textfield;
+  box-sizing: content-box;
+}
+input[type="search"]::-webkit-search-cancel-button,
+input[type="search"]::-webkit-search-decoration {
+  -webkit-appearance: none;
+}
+fieldset {
+  border: 1px solid #c0c0c0;
+  margin: 0 2px;
+  padding: 0.35em 0.625em 0.75em;
+}
+legend {
+  border: 0;
+  padding: 0;
+}
+textarea {
+  overflow: auto;
+}
+optgroup {
+  font-weight: bold;
+}
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+td,
+th {
+  padding: 0;
+}
+.clearfix::after {
+  content: '';
+  display: table;
+  clear: both;
+}
+html,
+body {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+body {
+  margin: 0;
+  padding: 30px;
+  font-family: 'Helvetica Neue', 'Helvetica', sans-serif;
+  font-weight: 300;
+  font-size: 20px;
+  background: green;
+  color: #eee;
+  box-sizing: border-box;
+}
+body * {
+  box-sizing: border-box;
+}
+body *:focus {
+  outline: none;
+}
+a,
+a:hover {
+  text-decoration: none;
+}
+@font-face {
+  font-family: 'ganon';
+  src: url('/fonts/ReturnofGanon.ttf') format('truetype');
+}
+@font-face {
+  font-family: 'triforce';
+  src: url('/fonts/Triforce.ttf') format('truetype');
+}
+body {
+  font-family: ganon;
+}
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  margin: 0;
+  padding: 0;
+  font-family: triforce;
+}
+#app,
+#app > *,
+.handler--app {
+  width: 100%;
+  height: 100%;
+}
+.background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  opacity: 0.7;
+}
+.header {
+  text-align: center;
+}
+.header h1 {
+  font-size: 2.4em;
+  text-shadow: 0 0 1px rgba(0, 0, 0, 0.8), 0 0 5px rgba(255, 255, 255, 0.2);
+}
+.header h1 a {
+  color: #D7D66D;
+}
+.menu {
+  display: inline-block;
+  position: absolute;
+  top: 35%;
+  left: 50%;
+  min-width: 300px;
+  padding: 20px;
+  background: rgba(0, 0, 0, 0.85);
+  border: 2px solid #D7D66D;
+  border-radius: 10px;
+  box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.3);
+  text-align: center;
+  transform: translate(-50%, -50%) scale(1);
+}
+.menu h2 {
+  margin-bottom: 20px;
+  font-size: 1.2em;
+  color: #D7D66D;
+}
+.menu a {
+  display: block;
+  padding: 5px;
+  color: #ccc;
+  text-decoration: none;
+  transition: background 400ms ease, color 200ms ease;
+}
+.menu a:hover {
+  color: #fff;
+  background: rgba(255, 255, 255, 0.2);
+}
+.menu a:active {
+  background: rgba(255, 255, 255, 0.5);
+}
+.menu-appear {
+  transform: translate(-50%, -50%) scale(0);
+  transition: transform 400ms cubic-bezier(0, 1.2, 1, 1.4);
+}
+.menu-appear.menu-appear-active {
+  transform: translate(-50%, -50%) scale(1);
+}
+.game-grid {
+  display: flex;
+  flex-direction: column;
+  font-size: 0;
+  line-height: 0;
+}
+.game-grid .game-grid-row {
+  display: flex;
+}
+.game-grid .game-grid-row .game-grid-cell {
+  position: relative;
+  width: 16px;
+  height: 16px;
+}
+.game-grid .game-grid-row .game-grid-base {
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  background: url(/images/tiles/overworld.png) no-repeat;
+  z-index: 0;
+  transform: scale(1.01);
+}
+.game-grid .game-grid-row .game-grid-base--grass {
+  background: #4B974C;
+}
+.game-grid .game-grid-row .game-grid-base--leaves {
+  background-position: -253px -57px;
+}
+.game-grid .game-grid-row .game-grid-base--bush {
+  background-position: -304px -57px;
+}
+.game-grid .game-grid-row .game-grid-base--water {
+  background: #5A81BE;
+}
+.game-grid .game-grid-row .game-grid-base--tree-trunk {
+  background: #6B976C;
+}
+.game-grid .game-grid-row .game-grid-overlay {
+  display: block;
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  background: url(/images/tiles/overworld.png) no-repeat;
+  z-index: 10;
+}
+.game-grid .game-grid-row .game-grid-overlay--water-below {
+  bottom: 0;
+  height: 8px;
+  background-position: -36px -185px;
+}
+.game-grid .game-grid-row .game-grid-overlay--water-above {
+  top: 0;
+  height: 8px;
+  background-position: -36px -227px;
+}
+.game-grid .game-grid-row .game-grid-overlay--water-left {
+  left: 0;
+  width: 8px;
+  background-position: -62px -202px;
+}
+.game-grid .game-grid-row .game-grid-overlay--water-right {
+  right: 0;
+  width: 8px;
+  background-position: -18px -202px;
+}
+.game-grid .game-grid-row .game-grid-overlay--water-below-left,
+.game-grid .game-grid-row .game-grid-overlay--water-below-right,
+.game-grid .game-grid-row .game-grid-overlay--water-above-left,
+.game-grid .game-grid-row .game-grid-overlay--water-above-right,
+.game-grid .game-grid-row .game-grid-overlay--water-diag-top-left,
+.game-grid .game-grid-row .game-grid-overlay--water-diag-top-right,
+.game-grid .game-grid-row .game-grid-overlay--water-diag-bottom-left,
+.game-grid .game-grid-row .game-grid-overlay--water-diag-bottom-right {
+  height: 8px;
+  width: 8px;
+}
+.game-grid .game-grid-row .game-grid-overlay--water-below-left {
+  bottom: 0;
+  left: 0;
+  background-position: -53px -194px;
+}
+.game-grid .game-grid-row .game-grid-overlay--water-below-right {
+  bottom: 0;
+  right: 0;
+  background-position: -27px -194px;
+}
+.game-grid .game-grid-row .game-grid-overlay--water-above-left {
+  top: 0;
+  left: 0;
+  background-position: -53px -218px;
+}
+.game-grid .game-grid-row .game-grid-overlay--water-above-right {
+  top: 0;
+  right: 0;
+  background-position: -27px -218px;
+}
+.game-grid .game-grid-row .game-grid-overlay--water-diag-top-left {
+  top: 0;
+  left: 0;
+  background-position: -53px -227px;
+}
+.game-grid .game-grid-row .game-grid-overlay--water-diag-top-right {
+  top: 0;
+  right: 0;
+  background-position: -27px -227px;
+}
+.game-grid .game-grid-row .game-grid-overlay--water-diag-bottom-left {
+  bottom: 0;
+  left: 0;
+  background-position: -53px -185px;
+}
+.game-grid .game-grid-row .game-grid-overlay--water-diag-bottom-right {
+  bottom: 0;
+  right: 0;
+  background-position: -27px -185px;
+}
+.game-grid .game-grid-row .game-grid-overlay--tree-trunk-above,
+.game-grid .game-grid-row .game-grid-overlay--tree-trunk-below,
+.game-grid .game-grid-row .game-grid-overlay--tree-trunk-right,
+.game-grid .game-grid-row .game-grid-overlay--tree-trunk-left,
+.game-grid .game-grid-row .game-grid-overlay--tree-trunk-above-right,
+.game-grid .game-grid-row .game-grid-overlay--tree-trunk-above-left,
+.game-grid .game-grid-row .game-grid-overlay--tree-trunk-below-left {
+  display: none;
+}
+.game-grid .game-grid-row .game-grid-overlay--tree-trunk-below-right {
+  width: 32px;
+  height: 32px;
+  background-position: -349px -83px;
+}
+.hero {
+  position: absolute;
+  bottom: 10%;
+  left: 50%;
+  transform: translate(-50%, 0);
+  z-index: 100;
+}
+.hero .sprite {
+  background: url(/images/tiles/link.png) no-repeat;
+}
+.game {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  padding: 10px;
+  background: rgba(0, 0, 0, 0.55);
+  box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.3);
+  text-align: center;
+  transform: translate(-50%, -50%) scale(2.2);
+}
+.game.game-appear {
+  opacity: 0;
+  transition: opacity 400ms ease;
+}
+.game.game-appear-active {
+  opacity: 1;
+}
+
+/*# sourceMappingURL=app.css.map */
