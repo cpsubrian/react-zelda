@@ -1,6 +1,8 @@
 .game-grid {
   display: flex;
   flex-direction: column;
+  font-size: 0;
+  line-height: 0;
 
   .game-grid-row {
     display: flex;
@@ -10,26 +12,23 @@
       width: 16px;
       height: 16px;
     }
+
+    // Grid base.
     .game-grid-base {
       position: absolute;
       width: 16px;
       height: 16px;
       background: url(/images/tiles/overworld.png) no-repeat;
       z-index: 0;
+      transform: scale(1.01);
+      //box-shadow: inset 0 0 1px rgba(0, 0, 0, 0.05);
     }
-    .game-grid-base--grass {
-      background: #4B974C;
-    }
-    .game-grid-base--leaves {
-      background-position: -253px  -57px;
-    }
-    .game-grid-base--bush {
-      background-position: -304px  -57px;
-    }
-    .game-grid-base--water {
-      background: #5A81BE;
-    }
+    .game-grid-base--grass  { background: #4B974C; }
+    .game-grid-base--leaves { background-position: -253px  -57px; }
+    .game-grid-base--bush   { background-position: -304px  -57px; }
+    .game-grid-base--water  { background: #5A81BE; }
 
+    // Grid overlays.
     .game-grid-overlay {
       display: block;
       position: absolute;
@@ -39,24 +38,75 @@
       z-index: 10;
     }
     .game-grid-overlay--water-below {
-      bottom: -4px;
+      bottom: 0;
       height: 8px;
       background-position: -36px -185px;
     }
     .game-grid-overlay--water-above {
-      top: -4px;
+      top: 0;
       height: 8px;
       background-position: -36px -227px;
     }
     .game-grid-overlay--water-left {
-      left: -4px;
+      left: 0;
       width: 8px;
       background-position: -62px -202px;
     }
     .game-grid-overlay--water-right {
-      right: -4px;
+      right: 0;
       width: 8px;
       background-position: -18px -202px;
+    }
+    .game-grid-overlay--water-below-left,
+    .game-grid-overlay--water-below-right,
+    .game-grid-overlay--water-above-left,
+    .game-grid-overlay--water-above-right,
+    .game-grid-overlay--water-diag-top-left,
+    .game-grid-overlay--water-diag-top-right,
+    .game-grid-overlay--water-diag-bottom-left,
+    .game-grid-overlay--water-diag-bottom-right {
+      height: 8px;
+      width: 8px;
+    }
+    .game-grid-overlay--water-below-left {
+      bottom: 0;
+      left: 0;
+      background-position: -53px -194px;
+    }
+    .game-grid-overlay--water-below-right {
+      bottom: 0;
+      right: 0;
+      background-position: -27px -194px;
+    }
+    .game-grid-overlay--water-above-left {
+      top: 0;
+      left: 0;
+      background-position: -53px -218px;
+    }
+    .game-grid-overlay--water-above-right {
+      top: 0;
+      right: 0;
+      background-position: -27px -218px;
+    }
+    .game-grid-overlay--water-diag-top-left {
+      top: 0;
+      left: 0;
+      background-position: -53px -227px;
+    }
+    .game-grid-overlay--water-diag-top-right {
+      top: 0;
+      right: 0;
+      background-position: -27px -227px;
+    }
+    .game-grid-overlay--water-diag-bottom-left {
+      bottom: 0;
+      left: 0;
+      background-position: -53px -185px;
+    }
+    .game-grid-overlay--water-diag-bottom-right {
+      bottom: 0;
+      right: 0;
+      background-position: -27px -185px;
     }
   }
 }

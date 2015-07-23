@@ -1,4 +1,5 @@
 import React from 'react'
+import _ from 'lodash'
 import Hero from './Hero'
 import gameStore from '../stores/gameStore'
 
@@ -34,7 +35,7 @@ class GameGrid extends React.Component {
 
   renderOverlays (tile, x, y) {
     if (tile.type === 'grass') {
-      let sides = this.testSides(x, y, 'water')
+      let sides = this.getSides(x, y, 'water')
       return sides.map((side) => {
         return <div key={'side-' + side} className={'game-grid-overlay game-grid-overlay--water-' + side}/>
       })
@@ -42,14 +43,18 @@ class GameGrid extends React.Component {
     return null
   }
 
-  testSides (x, y, type) {
+  getSides (x, y, type) {
     let sides = [
       {name: 'below', x, y: y + 1},
       {name: 'above', x, y: y - 1},
       {name: 'left', x: x - 1, y},
-      {name: 'right', x: x + 1, y}
+      {name: 'right', x: x + 1, y},
+      {name: 'diag-top-left', x: x - 1, y: y - 1},
+      {name: 'diag-top-right', x: x + 1, y: y - 1},
+      {name: 'diag-bottom-left', x: x - 1, y: y + 1},
+      {name: 'diag-bottom-right', x: x + 1, y: y + 1}
     ]
-    return sides
+    let orth = sides
       .filter((side) => {
         let tile = gameStore.getTileType(this.props.grid, side.x, side.y)
         return !!tile && (tile.type === type)
@@ -57,6 +62,32 @@ class GameGrid extends React.Component {
       .map((side) => {
         return side.name
       })
+    let checkDiag = [
+      ['diag-top-left', 'above', 'left'],
+      ['diag-top-right', 'above', 'right'],
+      ['diag-bottom-left', 'below', 'left'],
+      ['diag-bottom-right', 'below', 'right']
+    ]
+    checkDiag.forEach((diag) => {
+      if (_.includes(orth, diag[1]) || _.includes(orth, diag[2])) {
+        orth = _.without(orth, diag[0])
+      }
+    })
+    let corners = [
+      ['below', 'right'],
+      ['below', 'left'],
+      ['above', 'right'],
+      ['above', 'left']
+    ]
+    let results = orth.concat(corners
+      .filter((sides) => {
+        return _.includes(orth, sides[0]) && _.includes(orth, sides[1])
+      })
+      .map((sides) => {
+        return sides.join('-')
+      })
+    )
+    return results
   }
 
   render () {
