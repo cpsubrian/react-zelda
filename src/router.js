@@ -16,7 +16,7 @@ const routes = (
 
 const router = Router.create({
   routes: routes,
-  location: Router.HistoryLocation
+  location: Router.HashLocation
 })
 
 export default router
