@@ -3,6 +3,8 @@ Legend of Link
 
 A fun react experiment.
 
+![Screenshot](https://raw.githubusercontent.com/cpsubrian/react-zelda/master/resources/screenshot.png)
+
 Uses:
 
 - react
