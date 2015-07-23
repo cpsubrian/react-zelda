@@ -3,12 +3,26 @@ import gameActions from '../actions/gameActions'
 
 class GameStore {
 
+  /* Static API
+   ****************************************************************************/
   static tileTypes = {
-    '-': {name: 'grass'},
-    'a': {name: 'grass-alt'},
-    'b': {name: 'bush', solid: true}
+    '-': {type: 'grass'},
+    'l': {type: 'leaves'},
+    'b': {type: 'bush', solid: true},
+    'w': {type: 'water', solid: true}
   }
 
+  static getTileType (grid, x, y) {
+    let col = x * 2
+    let row = y
+    if (grid[row] && !!grid[row][col]) {
+      return GameStore.tileTypes[grid[row][col]]
+    }
+    return false
+  }
+
+  /* Constructor
+   ****************************************************************************/
   constructor () {
     // Bind actions.
     this.bindActions(gameActions)
@@ -22,20 +36,20 @@ class GameStore {
     // Grid terrain
     this.grid = [
       '- - - - - - - - - - - - - - - - - - - -',
-      '- a - - - - - - - - - - - - b - a - - -',
+      '- l - - - w w - - - - - - - b - l - - -',
+      '- - - - - w w w - - - - - - - - - - - -',
+      '- l - - - w - - - - - - l - - - - - - -',
+      '- - - - - - - b - - - - - - - - - b - -',
       '- - - - - - - - - - - - - - - - - - - -',
-      '- a - - - - - - - - - - a - - - - - - -',
-      '- - - - - - - - - - - - - - - - - b - -',
-      '- - - - - - - - - - - - - - - - - - - -',
-      '- - - a - - - - - - - - - - - - - - - -',
-      '- - - - - - - - - - a b b - - - - - - -',
+      '- - - l - - - - - - - - - - - - - - - -',
+      '- - - - - - - - - - l b b - - - - - - -',
       '- - - - - - - - - - - - - - - - - - - -',
       '- - b - - - - - - - - - - - - - - - - -',
-      '- - - - - - - - a - - - - - - - - - - -',
-      '- - - - a - - - - - - - - - b - - - - -',
-      '- - - - - - - - - - - - - - - - - - - -',
-      '- - - - - - - - - b - - - - - - - - - -',
-      '- - - - - - - - - - - - - - - - - - - -'
+      '- - - - - - - - l - - - - - - - - - - -',
+      '- - - - l - - - - - - - - - b - - - - w',
+      '- - - - - - - - - - - - - - - - - - w w',
+      '- - - - - - - - - b - - - - - - w w w -',
+      '- - - - - - - - - - - - - - - - w w - -'
     ]
   }
 
@@ -84,20 +98,12 @@ class GameStore {
     // Check grid extents.
     if (x < 0) return false
     if (y < 0) return false
-    if (x > (this.gridSize().width - 1)) return false
-    if (y > (this.gridSize().height - 1)) return false
 
     // Check tile.
-    let tile = this.getTileType(x, y)
-    if (tile.solid) return false
+    let tile = GameStore.getTileType(this.grid, x, y)
+    if (!tile || tile.solid) return false
 
     return true
-  }
-
-  getTileType (x, y) {
-    let col = x * 2
-    let row = y
-    return GameStore.tileTypes[this.grid[row][col]]
   }
 
 }

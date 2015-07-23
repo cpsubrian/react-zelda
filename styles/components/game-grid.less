@@ -7,22 +7,56 @@
 
     .game-grid-cell {
       position: relative;
-      display: block;
       width: 16px;
       height: 16px;
-      background: pink;
-      background: url(/images/tiles/overworld.png) no-repeat;
-      box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
     }
-
-    .game-grid-cell--- {
+    .game-grid-base {
+      position: absolute;
+      width: 16px;
+      height: 16px;
+      background: url(/images/tiles/overworld.png) no-repeat;
+      z-index: 0;
+    }
+    .game-grid-base--grass {
       background: #4B974C;
     }
-    .game-grid-cell--a {
+    .game-grid-base--leaves {
       background-position: -253px  -57px;
     }
-    .game-grid-cell--b {
+    .game-grid-base--bush {
       background-position: -304px  -57px;
+    }
+    .game-grid-base--water {
+      background: #5A81BE;
+    }
+
+    .game-grid-overlay {
+      display: block;
+      position: absolute;
+      width: 16px;
+      height: 16px;
+      background: url(/images/tiles/overworld.png) no-repeat;
+      z-index: 10;
+    }
+    .game-grid-overlay--water-below {
+      bottom: -4px;
+      height: 8px;
+      background-position: -36px -185px;
+    }
+    .game-grid-overlay--water-above {
+      top: -4px;
+      height: 8px;
+      background-position: -36px -227px;
+    }
+    .game-grid-overlay--water-left {
+      left: -4px;
+      width: 8px;
+      background-position: -62px -202px;
+    }
+    .game-grid-overlay--water-right {
+      right: -4px;
+      width: 8px;
+      background-position: -18px -202px;
     }
   }
 }
