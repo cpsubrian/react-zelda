@@ -36,6 +36,7 @@
     "babel-runtime": "^5.7.0",
     "lodash": "^3.10.0",
     "react": "^0.13.3",
+    "react-hotkeys": "^0.3.3",
     "react-router": "^0.13.3"
   }
 }

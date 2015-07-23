@@ -1,0 +1,28 @@
+.game-grid {
+  display: flex;
+  flex-direction: column;
+
+  .game-grid-row {
+    display: flex;
+
+    .game-grid-cell {
+      position: relative;
+      display: block;
+      width: 16px;
+      height: 16px;
+      background: pink;
+      background: url(/images/tiles/overworld.png) no-repeat;
+      box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+    }
+
+    .game-grid-cell--- {
+      background: #4B974C;
+    }
+    .game-grid-cell--a {
+      background-position: -253px  -57px;
+    }
+    .game-grid-cell--b {
+      background-position: -304px  -57px;
+    }
+  }
+}
