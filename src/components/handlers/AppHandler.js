@@ -24,9 +24,6 @@ class AppHandler extends React.Component {
     return (
       <HotKeys handlers={AppHandler.hotKeyHandlers}>
         <div className='handler--app'>
-          <div className='header'>
-            <h1><Link to='/'>Legend of Link</Link></h1>
-          </div>
           <RouteHandler/>
           <img className='background' src='/images/background.jpg'/>
         </div>

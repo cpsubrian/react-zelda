@@ -7,7 +7,7 @@ class HomeHandler extends React.Component {
   render () {
     return (
       <div className='handler--home'>
-        <Menu title='Game Menu'>
+        <Menu title='The Legend of Link'>
           <Link to='game'>Start Game</Link>
         </Menu>
       </div>
