@@ -34,13 +34,20 @@ class GameGrid extends React.Component {
   }
 
   renderOverlays (tile, x, y) {
+    let overlays = []
     if (tile.type === 'grass') {
       let sides = this.getSides(x, y, 'water')
-      return sides.map((side) => {
-        return <div key={'side-' + side} className={'game-grid-overlay game-grid-overlay--water-' + side}/>
-      })
+      overlays = overlays.concat(sides.map((side) => {
+        return <div key={'side-water-' + side} className={'game-grid-overlay game-grid-overlay--water-' + side}/>
+      }))
     }
-    return null
+    if (tile.type === 'tree-trunk') {
+      let sides = this.getSides(x, y, 'tree-trunk')
+      overlays = overlays.concat(sides.map((side) => {
+        return <div key={'side-tree-trunk-' + side} className={'game-grid-overlay game-grid-overlay--tree-trunk-' + side}/>
+      }))
+    }
+    return overlays
   }
 
   getSides (x, y, type) {

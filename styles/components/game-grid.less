@@ -27,6 +27,7 @@
     .game-grid-base--leaves { background-position: -253px  -57px; }
     .game-grid-base--bush   { background-position: -304px  -57px; }
     .game-grid-base--water  { background: #5A81BE; }
+    .game-grid-base--tree-trunk  { background: #6B976C; }
 
     // Grid overlays.
     .game-grid-overlay {
@@ -107,6 +108,20 @@
       bottom: 0;
       right: 0;
       background-position: -27px -185px;
+    }
+    .game-grid-overlay--tree-trunk-above,
+    .game-grid-overlay--tree-trunk-below,
+    .game-grid-overlay--tree-trunk-right,
+    .game-grid-overlay--tree-trunk-left,
+    .game-grid-overlay--tree-trunk-above-right,
+    .game-grid-overlay--tree-trunk-above-left,
+    .game-grid-overlay--tree-trunk-below-left {
+      display: none;
+    }
+    .game-grid-overlay--tree-trunk-below-right {
+      width: 32px;
+      height: 32px;
+      background-position: -349px -83px;
     }
   }
 }

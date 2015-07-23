@@ -9,7 +9,8 @@ class GameStore {
     '-': {type: 'grass'},
     'l': {type: 'leaves'},
     'b': {type: 'bush', solid: true},
-    'w': {type: 'water', solid: true}
+    'w': {type: 'water', solid: true},
+    't': {type: 'tree-trunk', solid: true}
   }
 
   static getTileType (grid, x, y) {
@@ -41,10 +42,10 @@ class GameStore {
       '- l - - - w - - - - - - l - - - - - - -',
       '- - - - - - - b - - - - - - - - - b - -',
       '- - - - - - - - - - - - - - - - - - - -',
-      '- - - l - - - - - - - - - - - - - - - -',
-      '- - - - - - - - - - l b b - - - - - - -',
-      '- - - - - - - - - - - - - - - - - - - -',
-      '- - b - - - - - - - - - - - - - - - - -',
+      '- - - l - t t - - - - - - - - - - - - -',
+      '- - - - - t t - - - l b b - - - - - - -',
+      '- - - - - - - - - - - - - - - - - t t -',
+      '- - b - - - - - - - - - - - - - - t t -',
       '- - - - - - - - l - - - - - - - - - - -',
       '- - - - l - - - - - - - - - b - - - - w',
       '- - - - - - - - - - - - - - - - - - w w',

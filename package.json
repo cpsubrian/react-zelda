@@ -1,7 +1,6 @@
 {
-  "name": "zelda",
-  "version": "1.0.0",
-  "private": true,
+  "name": "react-zelda",
+  "version": "0.0.1",
   "description": "",
   "main": "index.js",
   "scripts": {
