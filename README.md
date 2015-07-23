@@ -9,7 +9,7 @@ Uses:
 - react-router
 - alt flux
 
-Build Chaing:
+Build-Chain:
 
 - Webpack
 - Gulp
@@ -21,7 +21,14 @@ Install & 'Play'
 ```
 $ npm install
 $ npm start
+$ open localhost:3000
 ```
+
+Notes on 'Play':
+
+- Right now you just move around, but terrain collision-detection 'works' :)
+- Use the arrow keys
+- You must click the game area to 'focus' it (trying to figure out a workaround).
 
 Notes for development:
 
