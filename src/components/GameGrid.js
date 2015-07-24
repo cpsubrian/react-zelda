@@ -13,15 +13,14 @@ class GameGrid extends React.Component {
   renderRow (row, rowNum) {
     return (
       <div key={'row-' + rowNum} className='game-grid-row'>
-        {row.split(' ').map((char, i) => {
-          return this.renderCell(i, rowNum)
+        {row.map((tile, i) => {
+          return this.renderCell(tile, i, rowNum)
         })}
       </div>
     )
   }
 
-  renderCell (x, y) {
-    let tile = gameStore.getTileType(this.props.grid, x, y)
+  renderCell (tile, x, y) {
     return (
       <div key={'cell-' + x} className='game-grid-cell'>
         <div className={'game-grid-base game-grid-base--' + tile.type}/>
@@ -63,7 +62,7 @@ class GameGrid extends React.Component {
     ]
     let orth = sides
       .filter((side) => {
-        let tile = gameStore.getTileType(this.props.grid, side.x, side.y)
+        let tile = gameStore.getTile(this.props.grid, side.x, side.y)
         return !!tile && (tile.type === type)
       })
       .map((side) => {

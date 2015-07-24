@@ -17,6 +17,9 @@ class AppHandler extends React.Component {
     },
     'right': (e) => {
       gameActions.walk('right')
+    },
+    'space': (e) => {
+      gameActions.attack()
     }
   }
 

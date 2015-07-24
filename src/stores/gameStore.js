@@ -1,25 +1,19 @@
 import alt from '../alt'
+import {throttle} from '../lib/decorators'
+import world from '../lib/world'
+import {tileFromType, tileFromSymbol} from '../lib/tiles'
 import gameActions from '../actions/gameActions'
 
 class GameStore {
 
   /* Static API
    ****************************************************************************/
-  static tileTypes = {
-    '-': {type: 'grass'},
-    'l': {type: 'leaves'},
-    'b': {type: 'bush', solid: true},
-    'w': {type: 'water', solid: true},
-    't': {type: 'tree-trunk', solid: true}
-  }
-
-  static getTileType (grid, x, y) {
-    let col = x * 2
-    let row = y
-    if (grid[row] && !!grid[row][col]) {
-      return GameStore.tileTypes[grid[row][col]]
+  static getTile (grid, x, y) {
+    if (grid[y] && grid[y][x]) {
+      return grid[y][x]
+    } else {
+      return false
     }
-    return false
   }
 
   /* Constructor
@@ -31,27 +25,12 @@ class GameStore {
     // Hero's state.
     this.hero = {
       position: {x: 0, y: 0},
-      facing: 'south'
+      facing: 'south',
+      pose: 'walk'
     }
 
     // Grid terrain
-    this.grid = [
-      '- - - - - - - - - - - - - - - - - - - -',
-      '- l - - - w w - - - - - - - b - l - - -',
-      '- - - - - w w w - - - - - - - - - - - -',
-      '- l - - - w - - - - - - l - - - - - - -',
-      '- - - - - - - b - - - - - - - - - b - -',
-      '- - - - - - - - - - - - - - - - - - - -',
-      '- - - l - t t - - - - - - - - - - - - -',
-      '- - - - - t t - - - l b b - - - - - - -',
-      '- - - - - - - - - - - - - - - - - t t -',
-      '- - b - - - - - - - - - - - - - - t t -',
-      '- - - - - - - - l - - - - - - - - - - -',
-      '- - - - l - - - - - - - - - b - - - - w',
-      '- - w w - - - - - - - - - - - - - - w w',
-      '- - w w - - - - - b - - - - - - w w w -',
-      '- - - - - - - - - - - - - - - - w w - -'
-    ]
+    this.grid = this.buildGrid(this.sanitizeWorld(world))
   }
 
   /* Actions
@@ -86,13 +65,53 @@ class GameStore {
     }
   }
 
+  onAttack () {
+    this.doAttack()
+  }
+
+  @throttle(100)
+  doAttack () {
+    this.hero.pose = 'attack'
+
+    let x = this.hero.position.x
+    let y = this.hero.position.y
+    if (this.hero.facing === 'north') {
+      y = y - 1
+    }
+    if (this.hero.facing === 'south') {
+      y = y + 1
+    }
+    if (this.hero.facing === 'east') {
+      x = x + 1
+    }
+    if (this.hero.facing === 'west') {
+      x = x - 1
+    }
+
+    let tile = GameStore.getTile(this.grid, x, y)
+    if (tile && tile.destructable) {
+      this.grid[y][x] = tileFromType(tile.destructTo)
+    }
+  }
+
+  onStopAttack () {
+    this.hero.pose = 'walk'
+  }
+
   /* API
    ****************************************************************************/
-  gridSize () {
-    return {
-      width: this.grid[0].split(' ').length,
-      height: this.grid.length
-    }
+  sanitizeWorld (world) {
+    return world.trim().split('\n').map((line) => {
+      return line.trim().replace(/\s/g, '')
+    }).join('\n')
+  }
+
+  buildGrid (world) {
+    return world.split('\n').map((line) => {
+      return line.split('').map((symbol) => {
+        return tileFromSymbol(symbol)
+      })
+    })
   }
 
   validateMove (x, y) {
@@ -101,8 +120,14 @@ class GameStore {
     if (y < 0) return false
 
     // Check tile.
-    let tile = GameStore.getTileType(this.grid, x, y)
-    if (!tile || tile.solid) return false
+    if (this.grid[y] && this.grid[y][x]) {
+      let tile = this.grid[y][x]
+      if (tile.solid) {
+        return false
+      }
+    } else {
+      return false
+    }
 
     return true
   }
