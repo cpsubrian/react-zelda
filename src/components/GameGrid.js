@@ -1,6 +1,6 @@
 import React from 'react'
 import _ from 'lodash'
-import terrainSprite from '../sprites/terrain'
+import * as sprites from '../sprites'
 import Hero from './Hero'
 import gameStore from '../stores/gameStore'
 
@@ -24,7 +24,7 @@ class GameGrid extends React.Component {
   renderCell (tile, x, y) {
     return (
       <div key={'cell-' + x} className='game-grid-cell'>
-        <div className='game-grid-base' style={this.getStyle(tile.type, 'base')}/>
+        <div className='game-grid-base' style={this.getStyle('overworld', tile.type, 'base')}/>
         {this.renderOverlays(tile, x, y)}
         {this.renderDecorations(tile, x, y)}
         {(this.props.hero.position.x === x && this.props.hero.position.y === y) ?
@@ -49,7 +49,7 @@ class GameGrid extends React.Component {
     let decorations = []
     if (typeof tile.getDecorations === 'function') {
       _.each(tile.getDecorations(), (decoration, i) => {
-        let style = _.extend(this.getStyle(tile.type, 'decorations', decoration.type), decoration.style)
+        let style = _.extend(this.getStyle('overworld', tile.type, 'decorations', decoration.type), decoration.style)
         decorations.push(
           <div key={`decoration.${i}`} className='game-grid-decoration' style={style}/>
         )
@@ -61,7 +61,7 @@ class GameGrid extends React.Component {
   renderOverlaySides (tileType, x, y) {
     let sides = this.getSides(tileType, x, y)
     return sides.map((side) => {
-      let style = this.getStyle(tileType, 'overlays', side)
+      let style = this.getStyle('overworld', tileType, 'overlays', side)
       if (style) {
         return <div key={`side.${tileType}.${side}`} className='game-grid-overlay' style={style}/>
       } else {
@@ -70,16 +70,16 @@ class GameGrid extends React.Component {
     })
   }
 
-  getStyle (tileType, ...path) {
+  getStyle (spriteName, tileType, ...path) {
     let style = _.reduce(path, (part, key) => {
       if (!part) return false
       return part[key] || false
-    }, terrainSprite.tiles[tileType])
+    }, sprites[spriteName].tiles[tileType])
 
     if (style) {
       return _.extend(
         {},
-        terrainSprite.base,
+        sprites[spriteName].base,
         style
       )
     } else {

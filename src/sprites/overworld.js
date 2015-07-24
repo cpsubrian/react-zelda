@@ -1,4 +1,4 @@
-const terrainSprite = {
+const overworldSprite = {
   base: {
     width: 16,
     height: 16,
@@ -130,4 +130,4 @@ const terrainSprite = {
   }
 }
 
-export default terrainSprite
+export default overworldSprite
