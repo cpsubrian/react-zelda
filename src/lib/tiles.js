@@ -52,12 +52,11 @@ const tiles = [
 ]
 
 const tileFromType = (type) => {
-  return _.findWhere(tiles, {type})
+  return _.extend({}, _.findWhere(tiles, {type}))
 }
 
 const tileFromSymbol = (symbol) => {
-  return _.findWhere(tiles, {
-    symbol})
+  return _.extend({}, _.findWhere(tiles, {symbol}))
 }
 
 export default tiles
