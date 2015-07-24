@@ -2,7 +2,7 @@ const terrainSprite = {
   base: {
     width: 16,
     height: 16,
-    background: 'url(../images/tiles/overworld.png) no-repeat'
+    background: 'url(images/tiles/overworld.png) no-repeat'
   },
   tiles: {
     'grass': {

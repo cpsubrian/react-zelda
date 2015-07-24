@@ -1,6 +1,6 @@
 const heroSprite = {
   base: {
-    background: 'url(../images/tiles/link.png) no-repeat'
+    background: 'url(images/tiles/link.png) no-repeat'
   },
   poses: {
     walk: {
