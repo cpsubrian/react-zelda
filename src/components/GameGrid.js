@@ -1,5 +1,6 @@
 import React from 'react'
 import _ from 'lodash'
+import terrainSprite from '../sprites/terrain'
 import Hero from './Hero'
 import gameStore from '../stores/gameStore'
 
@@ -23,7 +24,7 @@ class GameGrid extends React.Component {
   renderCell (tile, x, y) {
     return (
       <div key={'cell-' + x} className='game-grid-cell'>
-        <div className={'game-grid-base game-grid-base--' + tile.type}/>
+        <div className='game-grid-base' style={this.getStyle(tile.type, 'base')}/>
         {this.renderOverlays(tile, x, y)}
         {(this.props.hero.position.x === x && this.props.hero.position.y === y) ?
           <Hero {...this.props.hero}/>
@@ -35,21 +36,44 @@ class GameGrid extends React.Component {
   renderOverlays (tile, x, y) {
     let overlays = []
     if (tile.type === 'grass') {
-      let sides = this.getSides(x, y, 'water')
-      overlays = overlays.concat(sides.map((side) => {
-        return <div key={'side-water-' + side} className={'game-grid-overlay game-grid-overlay--water-' + side}/>
-      }))
+      overlays = overlays.concat(this.renderOverlaySides('water', x, y))
     }
     if (tile.type === 'tree-trunk') {
-      let sides = this.getSides(x, y, 'tree-trunk')
-      overlays = overlays.concat(sides.map((side) => {
-        return <div key={'side-tree-trunk-' + side} className={'game-grid-overlay game-grid-overlay--tree-trunk-' + side}/>
-      }))
+      overlays = overlays.concat(this.renderOverlaySides('tree-trunk', x, y))
     }
     return overlays
   }
 
-  getSides (x, y, type) {
+  renderOverlaySides (tileType, x, y) {
+    let sides = this.getSides(tileType, x, y)
+    return sides.map((side) => {
+      let style = this.getStyle(tileType, 'overlays', side)
+      if (style) {
+        return <div key={`side.${tileType}.${side}`} className='game-grid-overlay' style={style}/>
+      } else {
+        return null
+      }
+    })
+  }
+
+  getStyle (tileType, ...path) {
+    let style = _.reduce(path, (part, key) => {
+      if (!part) return false
+      return part[key] || false
+    }, terrainSprite.tiles[tileType])
+
+    if (style) {
+      return _.extend(
+        {},
+        terrainSprite.base,
+        style
+      )
+    } else {
+      return false
+    }
+  }
+
+  getSides (type, x, y) {
     let sides = [
       {name: 'below', x, y: y + 1},
       {name: 'above', x, y: y - 1},

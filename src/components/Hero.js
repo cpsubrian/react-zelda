@@ -1,4 +1,5 @@
 import React from 'react'
+import _ from 'lodash'
 import heroSprite from '../sprites/hero'
 
 class Hero extends React.Component {
@@ -9,7 +10,11 @@ class Hero extends React.Component {
   }
 
   getStyles () {
-    return heroSprite[this.props.pose][this.props.facing][0]
+    return _.extend(
+      {},
+      heroSprite.base,
+      heroSprite.poses[this.props.pose][this.props.facing][0]
+    )
   }
 
   render () {
