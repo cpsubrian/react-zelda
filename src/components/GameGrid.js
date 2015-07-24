@@ -26,6 +26,7 @@ class GameGrid extends React.Component {
       <div key={'cell-' + x} className='game-grid-cell'>
         <div className='game-grid-base' style={this.getStyle(tile.type, 'base')}/>
         {this.renderOverlays(tile, x, y)}
+        {this.renderDecorations(tile, x, y)}
         {(this.props.hero.position.x === x && this.props.hero.position.y === y) ?
           <Hero {...this.props.hero}/>
         : null}
@@ -42,6 +43,19 @@ class GameGrid extends React.Component {
       overlays = overlays.concat(this.renderOverlaySides('tree-trunk', x, y))
     }
     return overlays
+  }
+
+  renderDecorations (tile, x, y) {
+    let decorations = []
+    if (typeof tile.getDecorations === 'function') {
+      _.each(tile.getDecorations(), (decoration, i) => {
+        let style = _.extend(this.getStyle(tile.type, 'decorations', decoration.type), decoration.style)
+        decorations.push(
+          <div key={`decoration.${i}`} className='game-grid-decoration' style={style}/>
+        )
+      })
+    }
+    return decorations
   }
 
   renderOverlaySides (tileType, x, y) {

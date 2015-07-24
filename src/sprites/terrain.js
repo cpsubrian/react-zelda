@@ -8,6 +8,18 @@ const terrainSprite = {
     'grass': {
       base: {
         background: '#4B974C'
+      },
+      decorations: {
+        flower: {
+          width: 8,
+          height: 8,
+          backgroundPosition: '-287px -48px'
+        },
+        spot: {
+          width: 8,
+          height: 8,
+          backgroundPosition: '-240px -39px'
+        }
       }
     },
     'leaves': {

@@ -1,4 +1,5 @@
 import alt from '../alt'
+import _ from 'lodash'
 import {throttle} from '../lib/decorators'
 import world from '../lib/world'
 import {tileFromType, tileFromSymbol} from '../lib/tiles'
@@ -109,7 +110,7 @@ class GameStore {
   buildGrid (world) {
     return world.split('\n').map((line) => {
       return line.split('').map((symbol) => {
-        return tileFromSymbol(symbol)
+        return _.extend({}, tileFromSymbol(symbol))
       })
     })
   }
