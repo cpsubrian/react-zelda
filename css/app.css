@@ -193,7 +193,7 @@ body {
   font-family: 'Helvetica Neue', 'Helvetica', sans-serif;
   font-weight: 300;
   font-size: 20px;
-  background: green;
+  background: #222;
   color: #eee;
   box-sizing: border-box;
 }
@@ -241,7 +241,7 @@ h6 {
   width: 100%;
   height: 100%;
   z-index: -1;
-  opacity: 0.7;
+  opacity: 0.3;
 }
 .header {
   text-align: center;
@@ -431,6 +431,7 @@ h6 {
   z-index: 100;
 }
 .hero .sprite {
+  position: relative;
   background: url(../images/tiles/link.png) no-repeat;
 }
 .game {
@@ -441,7 +442,7 @@ h6 {
   background: rgba(0, 0, 0, 0.55);
   box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.3);
   text-align: center;
-  transform: translate(-50%, -50%) scale(2.2);
+  transform: translate(-50%, -50%) scale(1.75);
 }
 .game.game-appear {
   opacity: 0;
