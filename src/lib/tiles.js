@@ -9,15 +9,15 @@ const tiles = [
         return this.decorations
       }
       let rand = Math.random()
-      if (rand > 0.9) {
-        this.decorations = [{type: 'flower', style: {
+      if (rand > 0.95) {
+        this.decorations = [{sprite: 'overworld', type: 'flower', style: {
           top: 3 + (5 * Math.random()),
           left: 2 + (5 * Math.random()),
           opacity: 0.3 + (Math.random() * 0.4),
           transform: 'scale(' + (0.5 + (Math.random() * 0.5)) + ')'
         }}]
-      } else if (rand > 0.85) {
-        this.decorations = [{type: 'spot', style: {
+      } else if (rand > 0.9) {
+        this.decorations = [{sprite: 'overworld', type: 'spot', style: {
           top: 3 + (5 * Math.random()),
           left: 2 + (5 * Math.random()),
           opacity: 0.5 + (Math.random() * 0.5)
@@ -42,7 +42,41 @@ const tiles = [
   {
     symbol: 'w',
     type: 'water',
-    solid: true
+    solid: true,
+    getDecorations () {
+      if (this.decorations) {
+        return this.decorations
+      }
+      let rand = Math.random()
+      if (rand > 0.92) {
+        this.decorations = [{sprite: 'cliffsWater', type: 'bubbles0', style: {
+          top: 3 + (5 * Math.random()),
+          left: 2 + (5 * Math.random()),
+          opacity: 0.5 + (Math.random() * 0.5)
+        }}]
+      } else if (rand > 0.87) {
+        this.decorations = [{sprite: 'cliffsWater', type: 'bubbles1', style: {
+          top: 3 + (5 * Math.random()),
+          left: 2 + (5 * Math.random()),
+          opacity: 0.5 + (Math.random() * 0.5)
+        }}]
+      } else if (rand > 0.82) {
+        this.decorations = [{sprite: 'cliffsWater', type: 'bubbles2', style: {
+          top: 3 + (5 * Math.random()),
+          left: 2 + (5 * Math.random()),
+          opacity: 0.5 + (Math.random() * 0.5)
+        }}]
+      } else if (rand > 0.7) {
+        this.decorations = [{sprite: 'cliffsWater', type: 'bubbles3', style: {
+          top: 3 + (5 * Math.random()),
+          left: 2 + (5 * Math.random()),
+          opacity: 0.5 + (Math.random() * 0.5)
+        }}]
+      } else {
+        this.decorations = []
+      }
+      return this.decorations
+    }
   },
   {
     symbol: 't',

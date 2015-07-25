@@ -1,4 +1,4 @@
-const heroSprite = {
+const hero = {
   base: {
     background: 'url(images/tiles/link.png) no-repeat'
   },
@@ -34,4 +34,4 @@ const heroSprite = {
   }
 }
 
-export default heroSprite
+export default hero

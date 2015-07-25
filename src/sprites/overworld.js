@@ -1,4 +1,4 @@
-const overworldSprite = {
+const overworld = {
   base: {
     width: 16,
     height: 16,
@@ -130,4 +130,4 @@ const overworldSprite = {
   }
 }
 
-export default overworldSprite
+export default overworld

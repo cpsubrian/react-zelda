@@ -49,7 +49,7 @@ class GameGrid extends React.Component {
     let decorations = []
     if (typeof tile.getDecorations === 'function') {
       _.each(tile.getDecorations(), (decoration, i) => {
-        let style = _.extend(this.getStyle('overworld', tile.type, 'decorations', decoration.type), decoration.style)
+        let style = _.extend(this.getStyle(decoration.sprite, tile.type, 'decorations', decoration.type), decoration.style)
         decorations.push(
           <div key={`decoration.${i}`} className='game-grid-decoration' style={style}/>
         )

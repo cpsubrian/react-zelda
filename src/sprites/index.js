@@ -1,3 +1,6 @@
+import cliffsWater from './cliffsWater'
+export {cliffsWater}
+
 import hero from './hero'
 export {hero}
 
