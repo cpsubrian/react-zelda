@@ -126,6 +126,20 @@ const overworld = {
           backgroundPosition: '-349px -83px'
         }
       }
+    },
+    'tree': {
+      base: {
+        background: '#4B974C'
+      },
+      overlays: {
+        'below-right': {
+          backgroundColor: '#4B974C',
+          width: 64,
+          height: 82,
+          transform: 'scale(0.5) translate(-50%, -75%)',
+          backgroundPosition: '-375px -206px'
+        }
+      }
     }
   }
 }

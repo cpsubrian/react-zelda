@@ -42,6 +42,9 @@ class GameGrid extends React.Component {
     if (tile.type === 'tree-trunk') {
       overlays = overlays.concat(this.renderOverlaySides('tree-trunk', x, y))
     }
+    if (tile.type === 'tree') {
+      overlays = overlays.concat(this.renderOverlaySides('tree', x, y))
+    }
     return overlays
   }
 

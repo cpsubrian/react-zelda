@@ -82,6 +82,11 @@ const tiles = [
     symbol: 't',
     type: 'tree-trunk',
     solid: true
+  },
+  {
+    symbol: 'T',
+    type: 'tree',
+    solid: true
   }
 ]
 
