@@ -14,8 +14,11 @@ module.exports = function (options) {
         'babel/polyfill',
         'alt',
         'lodash',
+        'immutable',
+        'pure-render-decorator',
         'react',
         'react-hot-loader',
+        'react-immutable-proptypes',
         'react-router'
       ]
     },

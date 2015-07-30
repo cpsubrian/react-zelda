@@ -1,4 +1,5 @@
 import alt from '../alt'
+import Immutable from 'immutable'
 import {throttle} from '../lib/decorators'
 import world from '../lib/world'
 import {tileFromType, tileFromSymbol} from '../lib/tiles'
@@ -9,11 +10,7 @@ class GameStore {
   /* Static API
    ****************************************************************************/
   static getTile (grid, x, y) {
-    if (grid[y] && grid[y][x]) {
-      return grid[y][x]
-    } else {
-      return false
-    }
+    return grid.getIn([y, x])
   }
 
   /* Constructor
@@ -22,72 +19,89 @@ class GameStore {
     // Bind actions.
     this.bindActions(gameActions)
 
-    // Hero's state.
-    this.hero = {
-      position: {x: 0, y: 0},
-      facing: 'south',
-      pose: 'walk'
-    }
-
     // Measurements (Matched by CSS)
-    this.settings = {
+    this.settings = Immutable.fromJS({
       grid: {
         cell: {
           width: 16,
           height: 16
         }
       }
-    }
+    })
 
     // Layers
-    this.layers = [
-      {type: 'overlays', overlays: [
-        {type: 'character', character: {type: 'hero', props: this.hero}}
-      ]},
-      {type: 'grid', base: true, grid: this.buildGrid(this.sanitizeWorld(world))}
-    ]
+    this.layers = Immutable.List([
+      // Overlays
+      Immutable.fromJS({
+        type: 'overlays',
+        overlays: [
+          {
+            type: 'character',
+            character: {
+              type: 'hero',
+              props: {
+                position: {x: 0, y: 0},
+                facing: 'south',
+                pose: 'walk'
+              }
+            }
+          }
+        ]
+      }),
+      // Base Grid
+      Immutable.Map({
+        type: 'grid',
+        base: true,
+        grid: this.buildGrid(this.sanitizeWorld(world))
+      })
+    ])
   }
 
   /* Actions
    ****************************************************************************/
   onStartWalk (dir) {
-    this.hero.walking = dir
     this.doWalk(dir)
   }
 
   @throttle(100)
   doWalk (dir) {
-    let x = this.hero.position.x
-    let y = this.hero.position.y
+    let hero = this.getHero().toJS()
+    let x = hero.position.x
+    let y = hero.position.y
+    let facing
 
     if (dir === 'up') {
-      if ((this.hero.facing === 'north') && this.validateMove(x, y - 1)) {
-        this.hero.position.y--
+      if ((hero.facing === 'north') && this.validateMove(x, y - 1)) {
+        y--
       }
-      this.hero.facing = 'north'
+      facing = 'north'
     }
     if (dir === 'down') {
-      if ((this.hero.facing === 'south') && this.validateMove(x, y + 1)) {
-        this.hero.position.y++
+      if ((hero.facing === 'south') && this.validateMove(x, y + 1)) {
+        y++
       }
-      this.hero.facing = 'south'
+      facing = 'south'
     }
     if (dir === 'left') {
-      if ((this.hero.facing === 'west') && this.validateMove(x - 1, y)) {
-        this.hero.position.x--
+      if ((hero.facing === 'west') && this.validateMove(x - 1, y)) {
+        x--
       }
-      this.hero.facing = 'west'
+      facing = 'west'
     }
     if (dir === 'right') {
-      if ((this.hero.facing === 'east') && this.validateMove(x + 1, y)) {
-        this.hero.position.x++
+      if ((hero.facing === 'east') && this.validateMove(x + 1, y)) {
+        x++
       }
-      this.hero.facing = 'east'
+      facing = 'east'
     }
+
+    this.setInHero(['position', 'x'], x)
+    this.setInHero(['position', 'y'], y)
+    this.setInHero(['facing'], facing)
   }
 
   onStopWalk () {
-    this.hero.walking = false
+    // Something here later...
   }
 
   onStartAttack () {
@@ -96,31 +110,34 @@ class GameStore {
 
   @throttle(100)
   doAttack () {
-    this.hero.pose = 'attack'
+    let hero = this.getHero().toJS()
+    let grid = this.layers.getIn([1, 'grid'])
+    let x = hero.position.x
+    let y = hero.position.y
 
-    let x = this.hero.position.x
-    let y = this.hero.position.y
-    if (this.hero.facing === 'north') {
+    if (hero.facing === 'north') {
       y = y - 1
     }
-    if (this.hero.facing === 'south') {
+    if (hero.facing === 'south') {
       y = y + 1
     }
-    if (this.hero.facing === 'east') {
+    if (hero.facing === 'east') {
       x = x + 1
     }
-    if (this.hero.facing === 'west') {
+    if (hero.facing === 'west') {
       x = x - 1
     }
 
-    let tile = GameStore.getTile(this.layers[1].grid, x, y)
+    let tile = GameStore.getTile(grid, x, y)
     if (tile && tile.destructable) {
-      this.layers[1].grid[y][x] = tileFromType(tile.destructTo)
+      this.setInLayer([1, 'grid', y, x], tileFromType(tile.destructTo))
     }
+
+    this.setInHero('pose', 'attack')
   }
 
   onStopAttack () {
-    this.hero.pose = 'walk'
+    this.setInHero('pose', 'walk')
   }
 
   /* API
@@ -132,27 +149,35 @@ class GameStore {
   }
 
   buildGrid (world) {
-    return world.split('\n').map((line) => {
-      return line.split('').map((symbol) => {
+    return Immutable.List(world.split('\n').map((line) => {
+      return Immutable.List(line.split('').map((symbol) => {
         return tileFromSymbol(symbol)
-      })
-    })
+      }))
+    }))
+  }
+
+  getHero () {
+    return this.layers.getIn([0, 'overlays', 0, 'character', 'props'])
+  }
+
+  setInLayer (prop, val) {
+    prop = Array.isArray(prop) ? prop : [prop]
+    this.layers = this.layers.setIn(prop, val)
+  }
+
+  setInHero (prop, val) {
+    prop = Array.isArray(prop) ? prop : [prop]
+    this.setInLayer([0, 'overlays', 0, 'character', 'props'].concat(prop), val)
   }
 
   validateMove (x, y) {
-    let grid = this.layers[1].grid
-
     // Check grid extents.
     if (x < 0) return false
     if (y < 0) return false
 
     // Check tile.
-    if (grid[y] && grid[y][x]) {
-      let tile = grid[y][x]
-      if (tile.solid) {
-        return false
-      }
-    } else {
+    let tile = GameStore.getTile(this.layers.getIn([1, 'grid']), x, y)
+    if (!tile || tile.solid) {
       return false
     }
 

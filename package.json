@@ -34,9 +34,12 @@
     "alt": "^0.17.1",
     "babel": "^5.6.23",
     "babel-runtime": "^5.7.0",
+    "immutable": "^3.7.4",
     "lodash": "^3.10.0",
+    "pure-render-decorator": "^0.1.0",
     "react": "^0.13.3",
     "react-hotkeys": "^0.3.3",
+    "react-immutable-proptypes": "^1.1.0",
     "react-router": "^0.13.3"
   }
 }
