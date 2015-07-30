@@ -13,9 +13,7 @@ class Hero extends React.Component {
   render () {
     let props = sprite.getProps(hero, 'poses', this.props.pose, this.props.facing, 0)
     return (
-      <div className='hero'>
-        <Sprite {...props}/>
-      </div>
+      <Sprite className='hero' {...props}/>
     )
   }
 }

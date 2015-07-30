@@ -1,32 +1,34 @@
-.game-grid {
+.grid {
+  position: relative;
   display: flex;
   flex-direction: column;
   font-size: 0;
   line-height: 0;
 
-  .game-grid-row {
+  .grid-row {
+    position: relative;
     display: flex;
 
-    .game-grid-cell {
+    .grid-cell {
       position: relative;
       width: 16px;
       height: 16px;
     }
 
     // Grid base.
-    .game-grid-base {
+    .grid-base {
       position: absolute;
       z-index: 0;
     }
 
     // Grid overlays.
-    .game-grid-overlay {
+    .grid-overlay {
       position: absolute;
       z-index: 10;
     }
 
     // Grid decorations.
-    .game-grid-decoration {
+    .grid-decoration {
       position: absolute;
       z-index: 20;
     }

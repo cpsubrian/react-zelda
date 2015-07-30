@@ -1,10 +1,9 @@
 import React from 'react'
 import _ from 'lodash'
-import * as sprites from '../sprites'
-import Hero from './Hero'
-import gameStore from '../stores/gameStore'
+import * as sprites from '../../sprites'
+import gameStore from '../../stores/gameStore'
 
-class GameGrid extends React.Component {
+class GridLayer extends React.Component {
 
   static propTypes = {
     grid: React.PropTypes.array,
@@ -13,7 +12,7 @@ class GameGrid extends React.Component {
 
   renderRow (row, rowNum) {
     return (
-      <div key={'row-' + rowNum} className='game-grid-row'>
+      <div key={'row-' + rowNum} className='grid-row'>
         {row.map((tile, i) => {
           return this.renderCell(tile, i, rowNum)
         })}
@@ -23,13 +22,10 @@ class GameGrid extends React.Component {
 
   renderCell (tile, x, y) {
     return (
-      <div key={'cell-' + x} className='game-grid-cell'>
-        <div className='game-grid-base' style={this.getStyle('overworld', tile.type, 'base')}/>
+      <div key={'cell-' + x} className='grid-cell'>
+        <div className='grid-base' style={this.getStyle('overworld', tile.type, 'base')}/>
         {this.renderOverlays(tile, x, y)}
         {this.renderDecorations(tile, x, y)}
-        {(this.props.hero.position.x === x && this.props.hero.position.y === y) ?
-          <Hero {...this.props.hero}/>
-        : null}
       </div>
     )
   }
@@ -54,7 +50,7 @@ class GameGrid extends React.Component {
       _.each(tile.getDecorations(), (decoration, i) => {
         let style = _.extend(this.getStyle(decoration.sprite, tile.type, 'decorations', decoration.type), decoration.style)
         decorations.push(
-          <div key={`decoration.${i}`} className='game-grid-decoration' style={style}/>
+          <div key={`decoration.${i}`} className='grid-decoration' style={style}/>
         )
       })
     }
@@ -66,7 +62,7 @@ class GameGrid extends React.Component {
     return sides.map((side) => {
       let style = this.getStyle('overworld', tileType, 'overlays', side)
       if (style) {
-        return <div key={`side.${tileType}.${side}`} className='game-grid-overlay' style={style}/>
+        return <div key={`side.${tileType}.${side}`} className='grid-overlay' style={style}/>
       } else {
         return null
       }
@@ -142,11 +138,11 @@ class GameGrid extends React.Component {
       return this.renderRow(row, i)
     })
     return (
-      <div className='game-grid'>
+      <div className='grid'>
         {rows}
       </div>
     )
   }
 }
 
-export default GameGrid
+export default GridLayer

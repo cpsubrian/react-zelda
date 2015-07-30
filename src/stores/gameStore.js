@@ -29,8 +29,23 @@ class GameStore {
       pose: 'walk'
     }
 
-    // Grid terrain
-    this.grid = this.buildGrid(this.sanitizeWorld(world))
+    // Measurements (Matched by CSS)
+    this.settings = {
+      grid: {
+        cell: {
+          width: 16,
+          height: 16
+        }
+      }
+    }
+
+    // Layers
+    this.layers = [
+      {type: 'grid', base: true, grid: this.buildGrid(this.sanitizeWorld(world))},
+      {type: 'overlays', overlays: [
+        {type: 'character', character: {type: 'hero', props: this.hero}}
+      ]}
+    ]
   }
 
   /* Actions
@@ -73,6 +88,7 @@ class GameStore {
   doAttack () {
     this.hero.pose = 'attack'
 
+    let grid = this.layers[0].grid
     let x = this.hero.position.x
     let y = this.hero.position.y
     if (this.hero.facing === 'north') {
@@ -88,9 +104,9 @@ class GameStore {
       x = x - 1
     }
 
-    let tile = GameStore.getTile(this.grid, x, y)
+    let tile = GameStore.getTile(grid, x, y)
     if (tile && tile.destructable) {
-      this.grid[y][x] = tileFromType(tile.destructTo)
+      grid[y][x] = tileFromType(tile.destructTo)
     }
   }
 
@@ -115,13 +131,15 @@ class GameStore {
   }
 
   validateMove (x, y) {
+    let grid = this.layers[0].grid
+
     // Check grid extents.
     if (x < 0) return false
     if (y < 0) return false
 
     // Check tile.
-    if (this.grid[y] && this.grid[y][x]) {
-      let tile = this.grid[y][x]
+    if (grid[y] && grid[y][x]) {
+      let tile = grid[y][x]
       if (tile.solid) {
         return false
       }
