@@ -6,8 +6,8 @@ import gameStore from '../../stores/gameStore'
 class GridLayer extends React.Component {
 
   static propTypes = {
-    grid: React.PropTypes.array,
-    hero: React.PropTypes.object
+    update: React.PropTypes.bool,
+    grid: React.PropTypes.array
   }
 
   renderRow (row, rowNum) {

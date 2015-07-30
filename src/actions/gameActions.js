@@ -1,16 +1,19 @@
 import alt from '../alt'
 
+const intervals = {}
+
 class GameActions {
 
-  walk (dir) {
+  startWalk (dir) {
     this.dispatch(dir)
   }
 
-  attack () {
+  stopWalk () {
     this.dispatch()
-    setTimeout(() => {
-      this.actions.stopAttack()
-    }, 100)
+  }
+
+  startAttack () {
+    this.dispatch()
   }
 
   stopAttack () {
