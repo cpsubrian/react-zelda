@@ -1,34 +1,40 @@
 const hero = {
   base: {
-    background: 'url(images/tiles/link.png) no-repeat'
+    bounds: [16, 16],
+    size: [50, 50],
+    url: 'images/sprites/link.png'
   },
   poses: {
     walk: {
+      base: {
+        off: [0, -5]
+      },
       north: [
-        { width: 18, height: 26, backgroundPosition: '-524px -130px'}
+        {pos: [200, 100]}
       ],
       south: [
-        { width: 18, height: 26, backgroundPosition: '-170px -126px'}
+        {pos: [200, 50]}
       ],
       east: [
-        { width: 18, height: 26, backgroundPosition: '-856px -126px'}
+        {pos: [200, 150], off: [-2, -5]}
       ],
       west: [
-        { width: 18, height: 26, backgroundPosition: '-856px -126px', transform: 'rotateY(180deg)'}
+        {pos: [200, 150], off: [-1, -5], flipH: true}
       ]
     },
     attack: {
+      base: {off: [0, -5]},
       north: [
-        { width: 20, height: 36, backgroundPosition: '-554px -303px'}
+        {pos: [100, 550], off: [-13, -18]}
       ],
       south: [
-        { width: 20, height: 33, backgroundPosition: '-162px -309px', bottom: '-14px'}
+        {pos: [50, 450], off: [-4, 0]}
       ],
       east: [
-        { width: 32, height: 23, backgroundPosition: '-890px -319px', right: '-9px'}
+        {pos: [150, 550]}
       ],
       west: [
-        { width: 32, height: 23, backgroundPosition: '-890px -319px', left: '-9px', transform: 'rotateY(180deg)'}
+        {pos: [150, 550], flipH: true}
       ]
     }
   }
