@@ -149,7 +149,6 @@ class GridLayerRow extends React.Component {
   }
 
   render () {
-    console.log('render row')
     return (
       <div className='grid-row'>
         {this.props.row.map((tile, i) => {
