@@ -63,7 +63,7 @@ function startWalkHandler (dir) {
 function stopWalkHandler (dir) {
   return (e) => {
     AppHandler.keysPressed[dir] = false
-    gameActions.stopWalk()
+    gameActions.stopWalk(dir)
   }
 }
 

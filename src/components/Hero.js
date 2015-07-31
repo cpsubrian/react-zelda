@@ -1,19 +1,20 @@
 import React from 'react'
-import sprite from '../lib/sprite'
+import spriteUtils from '../lib/sprite'
 import hero from '../sprites/hero'
-import Sprite from './Sprite'
+import AnimatedSprite from './AnimatedSprite'
 
 class Hero extends React.Component {
 
   static propTypes = {
     facing: React.PropTypes.string,
-    pose: React.PropTypes.string
+    pose: React.PropTypes.string,
+    animate: React.PropTypes.bool
   }
 
   render () {
-    let props = sprite.getProps(hero, 'poses', this.props.pose, this.props.facing, 0)
+    let frames = spriteUtils.getFrames(hero, 'poses', this.props.pose, this.props.facing)
     return (
-      <Sprite className='hero' {...props}/>
+      <AnimatedSprite className='hero' play={this.props.animate} {...frames}/>
     )
   }
 }

@@ -17,6 +17,20 @@ class Sprite extends React.Component {
     off: React.PropTypes.array
   }
 
+  getStyle () {
+    let style = Object.assign({}, {
+      width: this.props.bounds ? this.props.bounds[0] : null,
+      height: this.props.bounds ? this.props.bounds[1] : null
+    }, this.props.style || {})
+    if (this.props.flipH) {
+      style.transform = (style.transform || '') + ' rotateY(180deg)'
+    }
+    if (this.props.flipV) {
+      style.transform = (style.transform || '') + ' rotateX(180deg)'
+    }
+    return style
+  }
+
   getImgStyle () {
     let style = {
       background: `url(${this.props.url}) -${this.props.pos[0]}px -${this.props.pos[1]}px no-repeat`,
@@ -31,20 +45,8 @@ class Sprite extends React.Component {
   }
 
   render () {
-    let style = Object.assign({}, {
-      width: this.props.bounds ? this.props.bounds[0] : null,
-      height: this.props.bounds ? this.props.bounds[1] : null
-    }, this.props.style || {})
-
-    if (this.props.flipH) {
-      style.transform = (style.transform || '') + ' rotateY(180deg)'
-    }
-    if (this.props.flipV) {
-      style.transform = (style.transform || '') + ' rotateX(180deg)'
-    }
-
     return (
-      <div className={'sprite ' + (this.props.className || '')} style={style}>
+      <div className={'sprite ' + (this.props.className || '')} style={this.getStyle()}>
         <div className='sprite-img' style={this.getImgStyle()}/>
       </div>
     )

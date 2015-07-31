@@ -13,12 +13,13 @@ class OverlaysLayer extends React.Component {
 
   getStyle (props) {
     let style = {}
-    let settings = this.props.settings.toJS()
+    let {width, height} = this.props.settings.toJS().grid.cell
 
     if (props.position) {
-      let x = props.position.x * settings.grid.cell.width
-      let y = props.position.y * settings.grid.cell.height
-      style.transform = `translate(${x}px, ${y}px)`
+      let {x, y, sx, sy} = props.position
+      let tx = (x * width) + (sx ? ((sx / 100) * width) : 0)
+      let ty = (y * height) + (sy ? ((sy / 100) * height) : 0)
+      style.transform = `translate(${tx}px, ${ty}px)`
     }
 
     return style

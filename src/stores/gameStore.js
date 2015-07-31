@@ -40,9 +40,11 @@ class GameStore {
             character: {
               type: 'hero',
               props: {
-                position: {x: 0, y: 0},
+                position: {x: 0, y: 0, sx: 0, sy: 0},
+                stepSize: 20,
                 facing: 'south',
-                pose: 'walk'
+                pose: 'walk',
+                animate: false
               }
             }
           }
@@ -60,48 +62,91 @@ class GameStore {
   /* Actions
    ****************************************************************************/
   onStartWalk (dir) {
-    this.doWalk(dir)
+    this.onWalk(dir)
   }
 
-  @throttle(100)
-  doWalk (dir) {
+  onWalk (dir) {
+    let hero = this.getHero().toJS()
+    let walking = hero.walking
+    let sx = hero.position.sx
+    let sy = hero.position.sy
+    let next = false
+
+    if (dir === 'up') {
+      sy -= hero.stepSize
+      if (!walking) this.setInHero(['facing'], 'north')
+    }
+    if (dir === 'down') {
+      sy += hero.stepSize
+      if (!walking) this.setInHero(['facing'], 'south')
+    }
+    if (dir === 'left') {
+      sx -= hero.stepSize
+      if (!walking) this.setInHero(['facing'], 'west')
+    }
+    if (dir === 'right') {
+      sx += hero.stepSize
+      if (!walking) this.setInHero(['facing'], 'east')
+    }
+
+    if (!walking) {
+      this.setInHero('walking', dir)
+      this.setInHero('animate', true)
+    }
+
+    if (sx < -50) {
+      sx = 50
+      next = true
+    }
+    if (sx > 50) {
+      sx = -50
+      next = true
+    }
+    if (sy < -50) {
+      sy = 50
+      next = true
+    }
+    if (sy > 50) {
+      sy = -50
+      next = true
+    }
+
+    if (this.validateMove(hero.position.x, hero.position.y, sx, sy, dir)) {
+      if (next) {
+        this.onWalkNextTile(dir)
+      }
+      this.setInHero(['position', 'sx'], sx)
+      this.setInHero(['position', 'sy'], sy)
+    }
+  }
+
+  onWalkNextTile (dir) {
     let hero = this.getHero().toJS()
     let x = hero.position.x
     let y = hero.position.y
-    let facing
 
     if (dir === 'up') {
-      if ((hero.facing === 'north') && this.validateMove(x, y - 1)) {
-        y--
-      }
-      facing = 'north'
+      y--
     }
     if (dir === 'down') {
-      if ((hero.facing === 'south') && this.validateMove(x, y + 1)) {
-        y++
-      }
-      facing = 'south'
+      y++
     }
     if (dir === 'left') {
-      if ((hero.facing === 'west') && this.validateMove(x - 1, y)) {
-        x--
-      }
-      facing = 'west'
+      x--
     }
     if (dir === 'right') {
-      if ((hero.facing === 'east') && this.validateMove(x + 1, y)) {
-        x++
-      }
-      facing = 'east'
+      x++
     }
 
     this.setInHero(['position', 'x'], x)
     this.setInHero(['position', 'y'], y)
-    this.setInHero(['facing'], facing)
   }
 
-  onStopWalk () {
-    // Something here later...
+  onStopWalk (dir) {
+    if (this.getHero().get('walking') === dir) {
+      this.setInHero('animate', false)
+      this.setInHero('walking', false)
+    }
   }
 
   onStartAttack () {
@@ -170,7 +215,21 @@ class GameStore {
     this.setInLayer([0, 'overlays', 0, 'character', 'props'].concat(prop), val)
   }
 
-  validateMove (x, y) {
+  validateMove (x, y, sx, sy, dir) {
+    // Check adjacent tile if we beyond the edge.
+    if (dir === 'up' && sy < 0) {
+      y--
+    }
+    if (dir === 'down' && sy > 0) {
+      y++
+    }
+    if (dir === 'left' && sx < 0) {
+      x--
+    }
+    if (dir === 'right' && sx > 0) {
+      x++
+    }
+
     // Check grid extents.
     if (x < 0) return false
     if (y < 0) return false
