@@ -293,44 +293,85 @@ h6 {
 .menu-appear.menu-appear-active {
   transform: translate(-50%, -50%) scale(1);
 }
-.game-grid {
+.grid {
+  position: relative;
   display: flex;
   flex-direction: column;
   font-size: 0;
   line-height: 0;
 }
-.game-grid .game-grid-row {
+.grid .grid-row {
+  position: relative;
   display: flex;
 }
-.game-grid .game-grid-row .game-grid-cell {
+.grid .grid-row .grid-cell {
   position: relative;
   width: 16px;
   height: 16px;
 }
-.game-grid .game-grid-row .game-grid-base {
+.grid .grid-row .grid-base {
   position: absolute;
   z-index: 0;
-  transform: scale(1.01);
 }
-.game-grid .game-grid-row .game-grid-overlay {
+.grid .grid-row .grid-overlay {
   position: absolute;
   z-index: 10;
 }
-.game-grid .game-grid-row .game-grid-decoration {
+.grid .grid-row .grid-decoration {
   position: absolute;
   z-index: 20;
 }
-.hero {
-  position: absolute;
-  bottom: 10%;
-  left: 50%;
-  transform: translate(-50%, 0);
-  z-index: 100;
-}
-.hero .sprite {
+.layers {
   position: relative;
 }
-.game {
+.layers .layer {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+.layers .layer-base {
+  position: relative;
+}
+.layers .layer:nth-child(0) {
+  z-index: 100;
+}
+.layers .layer:nth-child(1) {
+  z-index: 99;
+}
+.layers .layer:nth-child(2) {
+  z-index: 98;
+}
+.layers .layer:nth-child(3) {
+  z-index: 97;
+}
+.layers .layer:nth-child(4) {
+  z-index: 96;
+}
+.layers .layer:nth-child(5) {
+  z-index: 95;
+}
+.layers .layer:nth-child(6) {
+  z-index: 94;
+}
+.layers .layer:nth-child(7) {
+  z-index: 93;
+}
+.layers .layer:nth-child(8) {
+  z-index: 92;
+}
+.layers .overlays {
+  position: relative;
+}
+.layers .overlays .overlay {
+  position: absolute;
+}
+.sprite {
+  position: relative;
+}
+.sprite .sprite-img {
+  position: absolute;
+}
+.handler--game {
   position: absolute;
   top: 50%;
   left: 50%;
@@ -338,14 +379,7 @@ h6 {
   background: rgba(0, 0, 0, 0.55);
   box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.3);
   text-align: center;
-  transform: translate(-50%, -50%) scale(1.75);
-}
-.game.game-appear {
-  opacity: 0;
-  transition: opacity 400ms ease;
-}
-.game.game-appear-active {
-  opacity: 1;
+  transform: translate(-50%, -50%) scale(2);
 }
 
 /*# sourceMappingURL=app.css.map */
