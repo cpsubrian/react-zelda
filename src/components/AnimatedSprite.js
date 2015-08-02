@@ -79,7 +79,6 @@ class AnimatedSprite extends React.Component {
   }
 
   render () {
-    console.log('render', this.state.frame)
     return <Sprite className={this.props.className} {...this.props.frames[this.state.frame]}/>
   }
 }
