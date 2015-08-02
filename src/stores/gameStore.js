@@ -1,4 +1,5 @@
 import alt from '../alt'
+import _ from 'lodash'
 import Immutable from 'immutable'
 import {throttle} from '../lib/decorators'
 import world from '../lib/world'
@@ -44,7 +45,8 @@ class GameStore {
                 stepSize: 20,
                 facing: 'south',
                 pose: 'walk',
-                animate: false
+                animate: false,
+                actions: Immutable.Set()
               }
             }
           }
@@ -67,7 +69,7 @@ class GameStore {
 
   onWalk (dir) {
     let hero = this.getHero().toJS()
-    let walking = hero.walking
+    let walking = _.intersection(hero.actions, ['walk:up', 'walk:down', 'walk:left', 'walk:right']).length > 0
     let sx = hero.position.sx
     let sy = hero.position.sy
     let next = false
@@ -90,7 +92,7 @@ class GameStore {
     }
 
     if (!walking) {
-      this.setInHero('walking', dir)
+      this.setInHero('actions', this.getHero().get('actions').add('walking:' + dir))
       this.setInHero('animate', true)
     }
 
@@ -143,9 +145,9 @@ class GameStore {
   }
 
   onStopWalk (dir) {
-    if (this.getHero().get('walking') === dir) {
+    this.setInHero('actions', this.getHero().get('actions').delete('walk:' + dir))
+    if (!this.getHero().get('actions').intersect(['walk:up', 'walk:down', 'walk:left', 'walk:right']).size) {
       this.setInHero('animate', false)
-      this.setInHero('walking', false)
     }
   }
 

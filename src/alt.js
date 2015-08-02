@@ -6,7 +6,9 @@ const alt = new Alt()
 // Debug dispatcher.
 if (process.env.NODE_ENV !== 'production') {
   alt.dispatcher.register((dispatch) => {
-    console.log(dispatch.action, dispatch.data)
+    if (window.DEBUG) {
+      console.log(dispatch.action, dispatch.data)
+    }
   })
 }
 
