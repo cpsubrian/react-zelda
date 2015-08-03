@@ -1,7 +1,9 @@
 require('babel/polyfill')
 
-import React from 'react'
+import React from 'react/addons'
 import router from './router'
+
+window.perf = React.addons.Perf
 
 window.onload = () => {
   // Run the router.
