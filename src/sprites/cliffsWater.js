@@ -1,31 +1,25 @@
 const cliffsWater = {
-  base: {
-    width: 16,
-    height: 16,
-    background: 'url(images/tiles/cliffs_water.png) no-repeat'
+  _base: {
+    size: [16, 16],
+    url: 'images/tiles/cliffs_water.png'
   },
   tiles: {
     water: {
+      _base: {
+        size: [8, 8]
+      },
       decorations: {
         bubbles0: {
-          width: 8,
-          height: 8,
-          backgroundPosition: '-293px -380px'
+          pos: [293, 380]
         },
         bubbles1: {
-          width: 8,
-          height: 8,
-          backgroundPosition: '-302px -380px'
+          pos: [302, 380]
         },
         bubbles2: {
-          width: 8,
-          height: 8,
-          backgroundPosition: '-293px -389px'
+          pos: [293, 389]
         },
         bubbles3: {
-          width: 8,
-          height: 8,
-          backgroundPosition: '-311px -389px'
+          pos: [311, 389]
         }
       }
     }

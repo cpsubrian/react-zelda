@@ -11,17 +11,20 @@ class Sprite extends React.Component {
     flipV: React.PropTypes.bool,
 
     // Sprite Img
-    url: React.PropTypes.string.isRequired,
     size: React.PropTypes.array.isRequired,
-    pos: React.PropTypes.array.isRequired,
-    off: React.PropTypes.array
+    background: React.PropTypes.string,
+    url: React.PropTypes.string,
+    pos: React.PropTypes.array,
+    off: React.PropTypes.array,
+    transform: React.PropTypes.string
   }
 
   getStyle () {
     let style = Object.assign({}, {
-      width: this.props.bounds ? this.props.bounds[0] : null,
-      height: this.props.bounds ? this.props.bounds[1] : null
+      width: this.props.bounds ? this.props.bounds[0] : this.props.size[0],
+      height: this.props.bounds ? this.props.bounds[1] : this.props.size[0]
     }, this.props.style || {})
+
     if (this.props.flipH) {
       style.transform = (style.transform || '') + ' rotateY(180deg)'
     }
@@ -33,14 +36,36 @@ class Sprite extends React.Component {
 
   getImgStyle () {
     let style = {
-      background: `url(${this.props.url}) -${this.props.pos[0]}px -${this.props.pos[1]}px no-repeat`,
       width: this.props.size[0],
-      height: this.props.size[1]
+      height: this.props.size[1],
+      backgroundRepeat: 'no-repeat'
+    }
+
+    if (this.props.background) {
+      style.background = this.props.background
+    }
+    if (this.props.url) {
+      style.backgroundImage = `url(${this.props.url})`
+      if (this.props.pos) {
+        style.backgroundPosition = `-${this.props.pos[0]}px -${this.props.pos[1]}px`
+      }
     }
     if (this.props.off) {
-      style.left = `${this.props.off[0]}px`
-      style.top = `${this.props.off[1]}px`
+      if ((this.props.off[0] > 0) || ((1 / this.props.off[0]) === +Infinity)) {
+        style.left = `${this.props.off[0]}px`
+      } else {
+        style.right = `${this.props.off[0]}px`
+      }
+      if ((this.props.off[1] > 0) || ((1 / this.props.off[1]) === +Infinity)) {
+        style.top = `${this.props.off[1]}px`
+      } else {
+        style.bottom = `${this.props.off[1]}px`
+      }
     }
+    if (this.props.transform) {
+      style.transform = this.props.transform
+    }
+
     return style
   }
 

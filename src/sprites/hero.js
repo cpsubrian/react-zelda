@@ -7,10 +7,10 @@ const hero = {
     url: 'images/sprites/link.png'
   },
   poses: {
+    _base: {
+      transform: `translate(0, -10px)`
+    },
     walk: {
-      _base: {
-        off: [0, -10]
-      },
       _animation: {
         rest: 3,
         start: 3
@@ -22,16 +22,13 @@ const hero = {
         _frames: spriteUtils.generateFrames(7, 'x', 50, {pos: [50, 50]})
       },
       east: {
-        _frames: spriteUtils.generateFrames(7, 'x', 50, {pos: [50, 150], off: [-2, -10]})
+        _frames: spriteUtils.generateFrames(7, 'x', 50, {pos: [50, 150], transform: `translate(-2px, -10px)`})
       },
       west: {
-        _frames: spriteUtils.generateFrames(7, 'x', 50, {pos: [50, 150], off: [-1, -10], flipH: true})
+        _frames: spriteUtils.generateFrames(7, 'x', 50, {pos: [50, 150], transform: `translate(-1px, -10px)`, flipH: true})
       }
     },
     attack: {
-      _base: {
-        off: [0, -10]
-      },
       _animation: {
         rest: 0,
         start: 0

@@ -3,7 +3,7 @@ import _ from 'lodash'
 const spriteUtils = {
 
   getProps: (sprite, ...path) => {
-    let props = {_animation: {}}
+    let props = {_animation: {}, style: {}}
 
     if (sprite._base) {
       Object.assign(props, sprite._base)
@@ -28,6 +28,15 @@ const spriteUtils = {
     }
 
     return props
+  },
+
+  getIn: (sprite, ...path) => {
+    return path.reduce((memo, key) => {
+      if (memo.hasOwnProperty(key)) {
+        return memo[key]
+      }
+      return {}
+    }, sprite)
   },
 
   getFrames: (sprite, ...path) => {

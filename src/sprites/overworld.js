@@ -1,144 +1,112 @@
 const overworld = {
-  base: {
-    width: 16,
-    height: 16,
-    background: 'url(images/tiles/overworld.png) no-repeat'
+  _base: {
+    size: [16, 16],
+    url: 'images/tiles/overworld.png'
   },
   tiles: {
     'grass': {
-      base: {
+      _base: {
         background: '#4B974C'
       },
       decorations: {
+        _base: {
+          size: [8, 8]
+        },
         flower: {
-          width: 8,
-          height: 8,
-          backgroundPosition: '-287px -48px'
+          pos: [287, 48]
         },
         spot: {
-          width: 8,
-          height: 8,
-          backgroundPosition: '-240px -39px'
+          pos: [240, 39]
+        }
+      },
+      edges: {
+        _base: {
+          bounds: [16, 16]
+        },
+        water: {
+          _base: {
+            size: [8, 8]
+          },
+          s: {
+            off: [0, -0],
+            size: [16, 8],
+            pos: [36, 185]
+          },
+          n: {
+            size: [16, 8],
+            pos: [36, 227]
+          },
+          w: {
+            size: [8, 16],
+            pos: [62, 202]
+          },
+          e: {
+            off: [-0, 0],
+            size: [8, 16],
+            pos: [18, 202]
+          },
+          saw: {
+            off: [0, -0],
+            pos: [53, 194]
+          },
+          sae: {
+            off: [-0, -0],
+            pos: [27, 194]
+          },
+          naw: {
+            pos: [53, 218]
+          },
+          nae: {
+            off: [-0, 0],
+            pos: [27, 218]
+          },
+          nw: {
+            pos: [53, 227]
+          },
+          ne: {
+            off: [-0, 0],
+            pos: [27, 227]
+          },
+          sw: {
+            off: [0, -0],
+            pos: [53, 185]
+          },
+          se: {
+            off: [-0, -0],
+            pos: [27, 185]
+          }
         }
       }
     },
     'leaves': {
-      base: {
-        backgroundPosition: '-253px  -57px'
+      _base: {
+        pos: [253, 57]
       }
     },
     'bush': {
-      base: {
-        backgroundPosition: '-304px  -57px'
+      _base: {
+        pos: [304, 57]
       }
     },
     'water': {
-      base: {
+      _base: {
         background: '#5A81BE'
-      },
-      overlays: {
-        'below': {
-          bottom: 0,
-          height: 8,
-          backgroundPosition: '-36px -185px'
-        },
-        'above': {
-          top: 0,
-          height: 8,
-          backgroundPosition: '-36px -227px'
-        },
-        'left': {
-          left: 0,
-          width: 8,
-          backgroundPosition: '-62px -202px'
-        },
-        'right': {
-          right: 0,
-          width: 8,
-          backgroundPosition: '-18px -202px'
-        },
-        'below-left': {
-          height: 8,
-          width: 8,
-          bottom: 0,
-          left: 0,
-          backgroundPosition: '-53px -194px'
-        },
-        'below-right': {
-          height: 8,
-          width: 8,
-          bottom: 0,
-          right: 0,
-          backgroundPosition: '-27px -194px'
-        },
-        'above-left': {
-          height: 8,
-          width: 8,
-          top: 0,
-          left: 0,
-          backgroundPosition: '-53px -218px'
-        },
-        'above-right': {
-          height: 8,
-          width: 8,
-          top: 0,
-          right: 0,
-          backgroundPosition: '-27px -218px'
-        },
-        'diag-top-left': {
-          height: 8,
-          width: 8,
-          top: 0,
-          left: 0,
-          backgroundPosition: '-53px -227px'
-        },
-        'diag-top-right': {
-          height: 8,
-          width: 8,
-          top: 0,
-          right: 0,
-          backgroundPosition: '-27px -227px'
-        },
-        'diag-bottom-left': {
-          height: 8,
-          width: 8,
-          bottom: 0,
-          left: 0,
-          backgroundPosition: '-53px -185px'
-        },
-        'diag-bottom-right': {
-          height: 8,
-          width: 8,
-          bottom: 0,
-          right: 0,
-          backgroundPosition: '-27px -185px'
-        }
       }
     },
     'tree-trunk': {
-      base: {
-        background: '#6B976C'
-      },
-      overlays: {
-        'below-right': {
-          width: 32,
-          height: 32,
-          backgroundPosition: '-349px -83px'
-        }
+      _base: {
+        background: '#6B976C',
+        size: [32, 32],
+        pos: [349, 83],
+        transform: 'translate(-50%, -50%)'
       }
     },
     'tree': {
-      base: {
-        background: '#4B974C'
-      },
-      overlays: {
-        'below-right': {
-          backgroundColor: '#4B974C',
-          width: 64,
-          height: 82,
-          transform: 'scale(0.5) translate(-50%, -75%)',
-          backgroundPosition: '-375px -206px'
-        }
+      _base: {
+        background: '#4B974C',
+        size: [64, 82],
+        pos: [375, 206],
+        transform: 'scale(0.5) translate(-50%, -75%)'
       }
     }
   }
