@@ -13,7 +13,7 @@ const spriteUtils = {
     }
 
     if (path.length) {
-      props = Object.assign(props, path.reduce((memo, key) => {
+      Object.assign(props, path.reduce((memo, key) => {
         if (memo.hasOwnProperty(key)) {
           if (memo[key].hasOwnProperty('_base')) {
             Object.assign(props, memo[key]._base)
@@ -21,7 +21,7 @@ const spriteUtils = {
           if (memo[key].hasOwnProperty('_animation')) {
             Object.assign(props._animation, memo[key]._animation)
           }
-          return memo[key]
+          return _.omit(memo[key], '_animation')
         }
         return {}
       }, sprite))

@@ -2,6 +2,7 @@ import React from 'react'
 import Immutable from 'immutable'
 import ImmutablePropTypes from 'react-immutable-proptypes'
 import pureRender from 'pure-render-decorator'
+import gameActions from '../actions/gameActions'
 import Tile from './Tile'
 import Character from './Character'
 
@@ -9,6 +10,7 @@ import Character from './Character'
 class Layer extends React.Component {
 
   static propTypes = {
+    index: React.PropTypes.number,
     style: ImmutablePropTypes.map,
     tiles: ImmutablePropTypes.list,
     characters: ImmutablePropTypes.list
@@ -18,6 +20,13 @@ class Layer extends React.Component {
     style: Immutable.Map({}),
     tiles: Immutable.List([]),
     characters: Immutable.List([])
+  }
+
+  componentWillMount () {
+    gameActions.renderLayer.defer(this.props.index)
+  }
+  componentWillUpdate () {
+    gameActions.renderLayer.defer(this.props.index)
   }
 
   render () {

@@ -1,22 +1,31 @@
 import alt from '../alt'
 
-const intervals = {}
+const actions = {}
 
 class GameActions {
 
+  renderLayer (index) {
+    this.dispatch(index)
+  }
+
   startWalk (dir) {
     this.dispatch(dir)
-    intervals[dir] = setInterval(() => {
+    actions[dir] = true
+    window.requestAnimationFrame(() => {
       this.actions.walk(dir)
-    }, (1000 / 30))
+    })
   }
 
   walk (dir) {
     this.dispatch(dir)
+    window.requestAnimationFrame(() => {
+      if (!actions[dir]) return
+      this.actions.walk(dir)
+    })
   }
 
   stopWalk (dir) {
-    clearInterval(intervals[dir])
+    actions[dir] = false
     this.dispatch(dir)
   }
 

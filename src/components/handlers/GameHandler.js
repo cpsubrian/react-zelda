@@ -34,7 +34,7 @@ class GameHandler extends React.Component {
       <div className='handler--game'>
         <div className='layers' style={this.getStyle()}>
           {this.props.layers.map((layer, num) => {
-            return <Layer key={`layer-${num}`} {...layer.toObject()}/>
+            return <Layer key={`layer-${num}`} index={num} {...layer.toObject()}/>
           })}
         </div>
       </div>

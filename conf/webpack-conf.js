@@ -13,14 +13,15 @@ module.exports = function (options) {
       vendors: [
         'babel/polyfill',
         'alt',
-        'giant-quadtree',
+        'giant-quadtree/src/quadtree',
         'lodash',
         'immutable',
         'pure-render-decorator',
         'react',
         'react-hot-loader',
         'react-immutable-proptypes',
-        'react-router'
+        'react-router',
+        'sat'
       ]
     },
     output: {

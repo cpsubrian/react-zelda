@@ -31,19 +31,25 @@ const hero = {
     attack: {
       _animation: {
         rest: 0,
-        start: 0
+        start: 0,
+        fps: 24,
+        snake: false,
+        loop: false
       },
       north: {
-        _frames: [{pos: [100, 550], off: [-13, -23]}]
+        _frames: spriteUtils.generateFrames(9, 'y', 50, {pos: [100, 300], transform: `translate(-13px, -23px)`})
       },
       south: {
-        _frames: [{pos: [50, 450], off: [-4, -5]}]
+        _animation: {
+          fps: 18
+        },
+        _frames: spriteUtils.generateFrames(6, 'y', 50, {pos: [50, 300], transform: `translate(-4px, -5px)`})
       },
       east: {
-        _frames: [{pos: [150, 550]}]
+        _frames: spriteUtils.generateFrames(9, 'y', 50, {pos: [150, 300]})
       },
       west: {
-        _frames: [{pos: [150, 550], flipH: true}]
+        _frames: spriteUtils.generateFrames(9, 'y', 50, {pos: [150, 300], flipH: true})
       }
     }
   }

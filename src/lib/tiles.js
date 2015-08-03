@@ -6,6 +6,7 @@ const tiles = [
     type: 'grass',
     sprite: 'overworld',
     path: ['tiles', 'grass'],
+    hitbox: [0, 0, 16, 16],
     decorations () {
       let rand = Math.random()
       if (rand > 0.95) {
@@ -30,7 +31,8 @@ const tiles = [
     symbol: 'l',
     type: 'leaves',
     sprite: 'overworld',
-    path: ['tiles', 'leaves']
+    path: ['tiles', 'leaves'],
+    hitbox: [0, 0, 16, 16]
   },
   {
     symbol: 'b',
@@ -39,7 +41,8 @@ const tiles = [
     path: ['tiles', 'bush'],
     solid: true,
     destructable: true,
-    destructTo: 'leaves'
+    destructTo: 'leaves',
+    hitbox: [0, 0, 16, 16]
   },
   {
     symbol: 'w',
@@ -47,6 +50,7 @@ const tiles = [
     sprite: 'overworld',
     path: ['tiles', 'water'],
     solid: true,
+    hitbox: [0, 0, 16, 16],
     decorations () {
       let rand = Math.random()
       if (rand > 0.92) {
@@ -83,14 +87,16 @@ const tiles = [
     type: 'tree-trunk',
     sprite: 'overworld',
     path: ['tiles', 'tree-trunk'],
-    solid: true
+    solid: true,
+    hitbox: [-16, -16, 32, 32]
   },
   {
     symbol: 'T',
     type: 'tree',
     sprite: 'overworld',
     path: ['tiles', 'tree'],
-    solid: true
+    solid: true,
+    hitbox: [-16, -16, 32, 32]
   }
 ]
 

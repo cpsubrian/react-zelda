@@ -30,11 +30,13 @@ class AppHandler extends React.Component {
     rightStart: startWalkHandler('right'),
     rightEnd: stopWalkHandler('right'),
     attackStart: (e) => {
+      e.preventDefault()
       if (AppHandler.keysPressed.attack) return
       AppHandler.keysPressed.attack = true
       gameActions.startAttack()
     },
     attackStop: (e) => {
+      e.preventDefault()
       AppHandler.keysPressed.attack = false
       gameActions.stopAttack()
     }
@@ -55,6 +57,7 @@ class AppHandler extends React.Component {
 // Walk Handlers
 function startWalkHandler (dir) {
   return (e) => {
+    e.preventDefault()
     if (AppHandler.keysPressed[dir]) return
     AppHandler.keysPressed[dir] = true
     gameActions.startWalk(dir)
@@ -62,6 +65,7 @@ function startWalkHandler (dir) {
 }
 function stopWalkHandler (dir) {
   return (e) => {
+    e.preventDefault()
     AppHandler.keysPressed[dir] = false
     gameActions.stopWalk(dir)
   }

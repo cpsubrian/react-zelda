@@ -1,7 +1,10 @@
 import alt from '../alt'
 import _ from 'lodash'
 import Immutable from 'immutable'
+import SAT from 'sat'
+import QuadTree from '../lib/QuadTree'
 import {throttle} from '../lib/decorators'
+import {tileFromType} from '../lib/tiles'
 import world from '../lib/world'
 import gameActions from '../actions/gameActions'
 
@@ -25,7 +28,7 @@ class GameStore {
         characters: [
           {
             position: {x: 0, y: 0},
-            stepSize: 4,
+            stepSize: 2,
             sprite: 'hero',
             facing: 'south',
             pose: 'walk',
@@ -46,13 +49,49 @@ class GameStore {
         }
       })
     ])
+
+    // QuadTrees for collision detection.
+    this.quadTrees = []
   }
 
   /* Actions
    ****************************************************************************/
+  onRenderLayer (index) {
+    let layer = this.layers.get(index)
+    if (layer) {
+
+      // Clear or create tree
+      if (this.quadTrees[index]) {
+        this.quadTrees[index].clear()
+      } else {
+        let bounds = {x: 0, y: 0, width: this.width, height: this.height}
+        this.quadTrees[index] = new QuadTree(bounds, false, 8)
+      }
+
+      // Add tiles to tree.
+      if (layer.has('tiles')) {
+        layer.get('tiles').forEach((tile, tIndex) => {
+          let {x, y} = tile.get('position').toJS()
+          let [top, left, width, height] = tile.get('hitbox')
+          this.quadTrees[index].insert({
+            layer: index,
+            index: tIndex,
+            solid: tile.get('solid'),
+            destructable: tile.get('destructable'),
+            x: x + left,
+            y: y + top,
+            width: width,
+            height: height,
+            hitbox: new SAT.Box(new SAT.Vector(x + left, y + top), width, height).toPolygon()
+          })
+        })
+      }
+    }
+  }
+
   onStartWalk (dir) {
     this.setInHero('actions', this.getHero().get('actions').add('walk:' + dir))
-    this.setInHero('animate', true)
+    this.setInHero('play', true)
     this.onWalk(dir)
   }
 
@@ -87,41 +126,52 @@ class GameStore {
   onStopWalk (dir) {
     this.setInHero('actions', this.getHero().get('actions').delete('walk:' + dir))
     if (!this.getHero().get('actions').size) {
-      this.setInHero('animate', false)
+      this.setInHero('play', false)
     }
   }
 
   onStartAttack () {
     this.doAttack()
     this.setInHero('actions', this.getHero().get('actions').add('attack'))
-    this.setInHero('animate', true)
+    this.setInHero('play', true)
   }
 
   @throttle(100)
   doAttack () {
-    /*let hero = this.getHero().toJS()
-    let grid = this.layers.getIn([1, 'grid'])
-    let x = hero.position.x
-    let y = hero.position.y
+    let hero = this.getHero()
+    let {x, y} = hero.get('position').toJS()
+    let [width, height] = [20, 20]
+    let [hw, hh] = [10, 10] // Hero Hitbox
+    let facing = hero.get('facing')
 
-    if (hero.facing === 'north') {
-      y = y - 1
+    // @todo attach this to the pose sprite?
+    if (facing === 'north') {
+      width = 12
+      y = y - height
     }
-    if (hero.facing === 'south') {
-      y = y + 1
+    if (facing === 'south') {
+      width = 12
+      y = y + hh
     }
-    if (hero.facing === 'east') {
-      x = x + 1
+    if (facing === 'east') {
+      height = 12
+      x = x + hw
     }
-    if (hero.facing === 'west') {
-      x = x - 1
+    if (facing === 'west') {
+      height = 12
+      x = x - width
     }
 
-    let tile = GameStore.getTile(grid, x, y)
-    if (tile && tile.destructable) {
-      this.setInLayer([1, 'grid', y, x], tileFromType(tile.destructTo))
-    }
-    */
+    let hits = this.checkHitbox({x, y, width, height,
+      property: 'destructable'
+    })
+
+    hits.forEach((hit) => {
+      let tile = this.layers.getIn([hit.layer, 'tiles', hit.index]).toJS()
+      let newTile = Immutable.fromJS(this.mergeTiles(tile, tileFromType(tile.destructTo)))
+      this.setInLayer([hit.layer, 'tiles', hit.index], newTile)
+    })
+
     this.setInHero('pose', 'attack')
   }
 
@@ -129,7 +179,7 @@ class GameStore {
     this.setInHero('pose', 'walk')
     this.setInHero('actions', this.getHero().get('actions').delete('attack'))
     if (!this.getHero().get('actions').size) {
-      this.setInHero('animate', false)
+      this.setInHero('play', false)
     }
   }
 
@@ -153,16 +203,51 @@ class GameStore {
     // Check grid extents.
     if (x < 0) return false
     if (y < 0) return false
-    if (x > this.width) return false
-    if (y > this.height) return false
+    if (x > (this.width - 16)) return false
+    if (y > (this.height - 16)) return false
 
-    // Check tile.
-    /*let tile = GameStore.getTile(this.layers.getIn([1, 'grid']), x, y)
-    if (!tile || tile.solid) {
-      return false
-    }*/
+    // Check hitboxes.
+    let hits = this.checkHitbox({
+      x: x + 3,
+      y: y + 3,
+      width: 10,
+      height: 10,
+      property: 'solid'
+    }, true)
+    if (hits.length) return false
 
     return true
+  }
+
+  checkHitbox ({x, y, width, height, property}, onlyOne, overlap = 1) {
+    let hitbox = (new SAT.Box(new SAT.Vector(x, y), width, height)).toPolygon()
+    let res = new SAT.Response()
+    let hits = []
+
+    this.layers.forEach((layer, index) => {
+      if (this.quadTrees[index]) {
+        let tiles = this.quadTrees[index].retrieve({x, y, width, height})
+        tiles.forEach((tile) => {
+          if (onlyOne && hits.length) return
+          if (property && !tile[property]) return
+          if (_.findWhere(hits, {layer: tile.layer, index: tile.index})) return
+          let hit = SAT.testPolygonPolygon(hitbox, tile.hitbox, res)
+          if (hit) {
+            if (res.overlap > overlap) {
+              hits.push(tile)
+            }
+            res.clear()
+          }
+        })
+        if (onlyOne && hits.length) return false
+      }
+    })
+
+    return hits
+  }
+
+  mergeTiles (tileA, tileB) {
+    return _.extend(_.pick(tileA, 'col', 'row', 'position', 'edges'), tileB)
   }
 }
 

@@ -57,8 +57,9 @@ const world = {
           let tile = Object.assign({}, tileFromSymbol(symbol), {
             row: row,
             col: col,
-            style: {
-              transform: `translate(${col * 16}px, ${row * 16}px)`
+            position: {
+              x: col * 16,
+              y: row * 16
             }
           })
           grid[row][col] = tile.type

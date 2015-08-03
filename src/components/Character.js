@@ -30,10 +30,11 @@ class Character extends React.Component {
     }
 
     if (this.props.animated) {
+      let name = `${this.props.pose}:${this.props.facing}`
       let frames = spriteUtils.getFrames(sprite, 'poses', this.props.pose, this.props.facing)
       return (
-        <div className={'character animated' + (this.props.className || '')} style={style}>
-          <AnimatedSprite play={this.props.play} {...frames}/>
+        <div className={'character animated ' + (this.props.className || '')} style={style}>
+          <AnimatedSprite name={name} play={this.props.play} {...frames}/>
         </div>
       )
     } else {

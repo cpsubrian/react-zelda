@@ -4,6 +4,7 @@ import Sprite from './Sprite'
 class AnimatedSprite extends React.Component {
 
   static propTypes = {
+    name: React.PropTypes.string.isRequired,
     frames: React.PropTypes.array.isRequired,
     className: React.PropTypes.string,
     play: React.PropTypes.bool,
@@ -36,45 +37,53 @@ class AnimatedSprite extends React.Component {
   }
 
   componentWillReceiveProps (nextProps) {
+    if (nextProps.name !== this.props.name) {
+      this.setState({frame: this.state.animating ? nextProps.start : nextProps.rest, asc: true})
+    }
     if (nextProps.play && !this.props.play && !this.state.animating) {
       this.startAnimating()
     } else if (!nextProps.play && this.props.play && this.state.animating) {
       this.stopAnimating()
-    } else if (nextProps.rest !== this.props.rest) {
-      this.setState({frame: nextProps.rest, asc: true})
     }
   }
 
   startAnimating () {
-    if (!this.state.animating) {
-      this.setState({frame: this.props.start, animating: true})
-      this.interval = setInterval(() => {
+    window.requestAnimationFrame((time) => {
+      if (!this.state.animating) {
+        this.setState({frame: this.props.start, animating: true})
         this.animationStep()
-      }, (1000 / this.props.fps))
-    }
+      }
+    })
   }
 
-  animationStep () {
-    if (this.state.frame === 0) {
-      this.setState({asc: true})
-    }
-    if (this.state.frame < (this.props.frames.length - 1)) {
-      this.setState({frame: this.state.asc ? this.state.frame + 1 : this.state.frame - 1})
-    } else if (!this.props.loop) {
-      this.stopAnimating()
-    } else {
-      if (this.props.snake) {
-        this.setState({frame: this.state.frame - 1, asc: false})
-      } else {
-        this.setState({frame: 0})
+  animationStep (standby = false, prevFrac = 0) {
+    if (!standby) {
+      if (this.state.frame === 0) {
+        this.setState({asc: true})
       }
+      if (this.state.frame < (this.props.frames.length - 1)) {
+        this.setState({frame: this.state.asc ? this.state.frame + 1 : this.state.frame - 1})
+      } else if (!this.props.loop) {
+        this.stopAnimating()
+      } else {
+        if (this.props.snake) {
+          this.setState({frame: this.state.frame - 1, asc: false})
+        } else {
+          this.setState({frame: 0})
+        }
+      }
+    }
+    if (this.state.animating) {
+      window.requestAnimationFrame((time) => {
+        let frac = time % (1000 / this.props.fps)
+        this.animationStep(frac > prevFrac, frac)
+      })
     }
   }
 
   stopAnimating () {
     if (this.state.animating) {
       this.setState({frame: this.props.rest, animating: false})
-      clearInterval(this.interval)
     }
   }
 

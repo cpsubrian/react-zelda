@@ -13,6 +13,7 @@ class Tile extends React.Component {
     className: React.PropTypes.string,
     sprite: React.PropTypes.string.isRequired,
     path: ImmutablePropTypes.list.isRequired,
+    position: ImmutablePropTypes.map,
     style: ImmutablePropTypes.map,
     decorations: ImmutablePropTypes.list,
     edges: ImmutablePropTypes.map
@@ -56,6 +57,12 @@ class Tile extends React.Component {
     let style = this.props.style ? this.props.style.toJS() : {}
     let sprite = sprites[this.props.sprite]
     let props = spriteUtils.getProps.apply(null, [sprite, ...this.props.path.toArray()])
+
+    if (this.props.position) {
+      let {x, y} = this.props.position.toJS()
+      style.transform = (style.transform || '') + ` translate(${x}px, ${y}px)`
+    }
+
     return (
       <div className={className} style={style}>
         <Sprite {...props}/>
