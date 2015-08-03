@@ -293,34 +293,6 @@ h6 {
 .menu-appear.menu-appear-active {
   transform: translate(-50%, -50%) scale(1);
 }
-.grid {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  font-size: 0;
-  line-height: 0;
-}
-.grid .grid-row {
-  position: relative;
-  display: flex;
-}
-.grid .grid-row .grid-cell {
-  position: relative;
-  width: 16px;
-  height: 16px;
-}
-.grid .grid-row .grid-base {
-  position: absolute;
-  z-index: 0;
-}
-.grid .grid-row .grid-overlay {
-  position: absolute;
-  z-index: 10;
-}
-.grid .grid-row .grid-decoration {
-  position: absolute;
-  z-index: 20;
-}
 .layers {
   position: relative;
 }
@@ -329,47 +301,38 @@ h6 {
   top: 0;
   left: 0;
 }
-.layers .layer-base {
-  position: relative;
-}
-.layers .layer:nth-child(0) {
-  z-index: 100;
-}
-.layers .layer:nth-child(1) {
-  z-index: 99;
-}
-.layers .layer:nth-child(2) {
-  z-index: 98;
-}
-.layers .layer:nth-child(3) {
-  z-index: 97;
-}
-.layers .layer:nth-child(4) {
-  z-index: 96;
-}
-.layers .layer:nth-child(5) {
-  z-index: 95;
-}
-.layers .layer:nth-child(6) {
-  z-index: 94;
-}
-.layers .layer:nth-child(7) {
-  z-index: 93;
-}
-.layers .layer:nth-child(8) {
-  z-index: 92;
-}
-.layers .overlays {
-  position: relative;
-}
-.layers .overlays .overlay {
-  position: absolute;
-}
 .sprite {
   position: relative;
 }
 .sprite .sprite-img {
   position: absolute;
+}
+.tile {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+.tile .decorations {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+.tile .edges {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+.tile .edges .sprite {
+  position: absolute;
+}
+.character {
+  position: absolute;
+  top: 0;
+  left: 0;
 }
 .handler--game {
   position: absolute;
