@@ -13,6 +13,7 @@ module.exports = function (options) {
       vendors: [
         'babel/polyfill',
         'alt',
+        'giant-quadtree',
         'lodash',
         'immutable',
         'pure-render-decorator',
