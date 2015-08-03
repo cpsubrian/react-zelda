@@ -64,36 +64,33 @@ class GameStore {
   /* Actions
    ****************************************************************************/
   onStartWalk (dir) {
+    this.setInHero('actions', this.getHero().get('actions').add('walk:' + dir))
+    this.setInHero('animate', true)
     this.onWalk(dir)
   }
 
   onWalk (dir) {
     let hero = this.getHero().toJS()
-    let walking = _.intersection(hero.actions, ['walk:up', 'walk:down', 'walk:left', 'walk:right']).length > 0
+    let changeDir = _.intersection(hero.actions, ['walk:up', 'walk:down', 'walk:left', 'walk:right']).length === 1
     let sx = hero.position.sx
     let sy = hero.position.sy
     let next = false
 
     if (dir === 'up') {
       sy -= hero.stepSize
-      if (!walking) this.setInHero(['facing'], 'north')
+      if (changeDir) this.setInHero(['facing'], 'north')
     }
     if (dir === 'down') {
       sy += hero.stepSize
-      if (!walking) this.setInHero(['facing'], 'south')
+      if (changeDir) this.setInHero(['facing'], 'south')
     }
     if (dir === 'left') {
       sx -= hero.stepSize
-      if (!walking) this.setInHero(['facing'], 'west')
+      if (changeDir) this.setInHero(['facing'], 'west')
     }
     if (dir === 'right') {
       sx += hero.stepSize
-      if (!walking) this.setInHero(['facing'], 'east')
-    }
-
-    if (!walking) {
-      this.setInHero('actions', this.getHero().get('actions').add('walking:' + dir))
-      this.setInHero('animate', true)
+      if (changeDir) this.setInHero(['facing'], 'east')
     }
 
     if (sx < -50) {
@@ -146,13 +143,15 @@ class GameStore {
 
   onStopWalk (dir) {
     this.setInHero('actions', this.getHero().get('actions').delete('walk:' + dir))
-    if (!this.getHero().get('actions').intersect(['walk:up', 'walk:down', 'walk:left', 'walk:right']).size) {
+    if (!this.getHero().get('actions').size) {
       this.setInHero('animate', false)
     }
   }
 
   onStartAttack () {
     this.doAttack()
+    this.setInHero('actions', this.getHero().get('actions').add('attack'))
+    this.setInHero('animate', true)
   }
 
   @throttle(100)
@@ -185,6 +184,10 @@ class GameStore {
 
   onStopAttack () {
     this.setInHero('pose', 'walk')
+    this.setInHero('actions', this.getHero().get('actions').delete('attack'))
+    if (!this.getHero().get('actions').size) {
+      this.setInHero('animate', false)
+    }
   }
 
   /* API
@@ -248,3 +251,12 @@ class GameStore {
 }
 
 export default alt.createStore(GameStore)
+
+// allow hot loading for development usage
+if (process.env.NODE_ENV !== 'production') {
+  if (module.hot) {
+    module.hot.dispose(() => {
+      delete alt.stores['GameStore']
+    })
+  }
+}
