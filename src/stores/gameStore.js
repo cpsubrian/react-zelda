@@ -34,7 +34,16 @@ class GameStore {
             pose: 'walk',
             animated: true,
             play: false,
-            actions: Immutable.Set()
+            actions: Immutable.Set(),
+            hitboxes: {
+              walk: [3, 3, 10, 10],
+              attack: {
+                north: [0, -16, 16, 16],
+                south: [0, 32, 16, 16],
+                east: [16, 0, 16, 16],
+                west: [-16, 0, 16, 16]
+              }
+            }
           }
         ],
         style: {
@@ -60,12 +69,15 @@ class GameStore {
     let layer = this.layers.get(index)
     if (layer) {
 
-      // Clear or create tree
+      // Clear or create trees
       if (this.quadTrees[index]) {
-        this.quadTrees[index].clear()
+        this.quadTrees[index]['tiles'].clear()
+        this.quadTrees[index]['characters'].clear()
       } else {
         let bounds = {x: 0, y: 0, width: this.width, height: this.height}
-        this.quadTrees[index] = new QuadTree(bounds, false, 8)
+        this.quadTrees[index] = {}
+        this.quadTrees[index]['tiles'] = new QuadTree(bounds, false, 8)
+        this.quadTrees[index]['characters'] = new QuadTree(bounds, false, 8)
       }
 
       // Add tiles to tree.
@@ -73,11 +85,29 @@ class GameStore {
         layer.get('tiles').forEach((tile, tIndex) => {
           let {x, y} = tile.get('position').toJS()
           let [top, left, width, height] = tile.get('hitbox')
-          this.quadTrees[index].insert({
+          this.quadTrees[index]['tiles'].insert({
             layer: index,
             index: tIndex,
             solid: tile.get('solid'),
             destructable: tile.get('destructable'),
+            x: x + left,
+            y: y + top,
+            width: width,
+            height: height,
+            hitbox: new SAT.Box(new SAT.Vector(x + left, y + top), width, height).toPolygon()
+          })
+        })
+      }
+
+      // Add characters to tree.
+      if (layer.has('characters')) {
+        layer.get('characters').forEach((character, tIndex) => {
+          let {x, y} = character.get('position').toJS()
+          // @todo handle poses better.
+          let [top, left, width, height] = character.getIn(['hitboxes', 'walk']).toJS()
+          this.quadTrees[index]['characters'].insert({
+            layer: index,
+            index: tIndex,
             x: x + left,
             y: y + top,
             width: width,
@@ -139,30 +169,15 @@ class GameStore {
   @throttle(100)
   doAttack () {
     let hero = this.getHero()
-    let {x, y} = hero.get('position').toJS()
-    let [width, height] = [20, 20]
-    let [hw, hh] = [10, 10] // Hero Hitbox
     let facing = hero.get('facing')
+    let {x, y} = hero.get('position').toJS()
+    let [left, top, width, height] = hero.getIn(['hitboxes', 'attack', facing]).toJS()
 
-    // @todo attach this to the pose sprite?
-    if (facing === 'north') {
-      width = 12
-      y = y - height
-    }
-    if (facing === 'south') {
-      width = 12
-      y = y + hh
-    }
-    if (facing === 'east') {
-      height = 12
-      x = x + hw
-    }
-    if (facing === 'west') {
-      height = 12
-      x = x - width
-    }
-
-    let hits = this.checkHitbox({x, y, width, height,
+    let hits = this.checkHitbox({
+      x: x + left,
+      y: y + top,
+      width: width,
+      height: height,
       property: 'destructable'
     })
 
@@ -207,11 +222,12 @@ class GameStore {
     if (y > (this.height - 16)) return false
 
     // Check hitboxes.
+    let [left, top, w, h] = this.getHero().getIn(['hitboxes', 'walk']).toJS()
     let hits = this.checkHitbox({
-      x: x + 3,
-      y: y + 3,
-      width: 10,
-      height: 10,
+      x: x + left,
+      y: y + top,
+      width: w,
+      height: h,
       property: 'solid'
     }, true)
     if (hits.length) return false
@@ -220,27 +236,30 @@ class GameStore {
   }
 
   checkHitbox ({x, y, width, height, property}, onlyOne, overlap = 1) {
+    let types = ['tiles', 'characters']
     let hitbox = (new SAT.Box(new SAT.Vector(x, y), width, height)).toPolygon()
     let res = new SAT.Response()
     let hits = []
 
     this.layers.forEach((layer, index) => {
-      if (this.quadTrees[index]) {
-        let tiles = this.quadTrees[index].retrieve({x, y, width, height})
-        tiles.forEach((tile) => {
-          if (onlyOne && hits.length) return
-          if (property && !tile[property]) return
-          if (_.findWhere(hits, {layer: tile.layer, index: tile.index})) return
-          let hit = SAT.testPolygonPolygon(hitbox, tile.hitbox, res)
-          if (hit) {
-            if (res.overlap > overlap) {
-              hits.push(tile)
+      types.forEach((type) => {
+        if (this.quadTrees[index] && this.quadTrees[index][type]) {
+          let objects = this.quadTrees[index][type].retrieve({x, y, width, height})
+          objects.forEach((obj) => {
+            if (onlyOne && hits.length) return
+            if (property && !obj[property]) return
+            if (_.findWhere(hits, {layer: obj.layer, index: obj.index})) return
+            let hit = SAT.testPolygonPolygon(hitbox, obj.hitbox, res)
+            if (hit) {
+              if (res.overlap > overlap) {
+                hits.push(obj)
+              }
+              res.clear()
             }
-            res.clear()
-          }
-        })
-        if (onlyOne && hits.length) return false
-      }
+          })
+          if (onlyOne && hits.length) return false
+        }
+      })
     })
 
     return hits
