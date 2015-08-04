@@ -69,33 +69,32 @@ class GameStore {
     let layer = this.layers.get(index)
     if (layer) {
 
-      // Clear or create trees
+      // Clear or create trees and hitboxes.
       if (this.quadTrees[index]) {
-        this.quadTrees[index]['tiles'].clear()
-        this.quadTrees[index]['characters'].clear()
+        this.quadTrees[index].clear()
       } else {
         let bounds = {x: 0, y: 0, width: this.width, height: this.height}
-        this.quadTrees[index] = {}
-        this.quadTrees[index]['tiles'] = new QuadTree(bounds, false, 8)
-        this.quadTrees[index]['characters'] = new QuadTree(bounds, false, 8)
+        this.quadTrees[index] = new QuadTree(bounds, 10, 5)
       }
 
-      // Add tiles to tree.
+      // Tiles
       if (layer.has('tiles')) {
         layer.get('tiles').forEach((tile, tIndex) => {
+          if (!tile.get('solid')) return
           let {x, y} = tile.get('position').toJS()
           let [top, left, width, height] = tile.get('hitbox')
-          this.quadTrees[index]['tiles'].insert({
+          let obj = {
             layer: index,
+            group: 'tiles',
             index: tIndex,
-            solid: tile.get('solid'),
-            destructable: tile.get('destructable'),
             x: x + left,
             y: y + top,
             width: width,
-            height: height,
-            hitbox: new SAT.Box(new SAT.Vector(x + left, y + top), width, height).toPolygon()
-          })
+            height: height
+          }
+          let hitbox = new SAT.Box(new SAT.Vector(obj.x, obj.y), obj.width, obj.height).toPolygon()
+          obj.hitbox = hitbox
+          this.quadTrees[index].insert(obj)
         })
       }
 
@@ -103,17 +102,19 @@ class GameStore {
       if (layer.has('characters')) {
         layer.get('characters').forEach((character, tIndex) => {
           let {x, y} = character.get('position').toJS()
-          // @todo handle poses better.
           let [top, left, width, height] = character.getIn(['hitboxes', 'walk']).toJS()
-          this.quadTrees[index]['characters'].insert({
+          let obj = {
             layer: index,
+            group: 'characters',
             index: tIndex,
             x: x + left,
             y: y + top,
             width: width,
-            height: height,
-            hitbox: new SAT.Box(new SAT.Vector(x + left, y + top), width, height).toPolygon()
-          })
+            height: height
+          }
+          let hitbox = new SAT.Box(new SAT.Vector(obj.x, obj.y), obj.width, obj.height).toPolygon()
+          obj.hitbox = hitbox
+          this.quadTrees[index].insert(obj)
         })
       }
     }
@@ -236,30 +237,28 @@ class GameStore {
   }
 
   checkHitbox ({x, y, width, height, property}, onlyOne, overlap = 1) {
-    let types = ['tiles', 'characters']
     let hitbox = (new SAT.Box(new SAT.Vector(x, y), width, height)).toPolygon()
     let res = new SAT.Response()
     let hits = []
 
     this.layers.forEach((layer, index) => {
-      types.forEach((type) => {
-        if (this.quadTrees[index] && this.quadTrees[index][type]) {
-          let objects = this.quadTrees[index][type].retrieve({x, y, width, height})
-          objects.forEach((obj) => {
-            if (onlyOne && hits.length) return
-            if (property && !obj[property]) return
-            if (_.findWhere(hits, {layer: obj.layer, index: obj.index})) return
-            let hit = SAT.testPolygonPolygon(hitbox, obj.hitbox, res)
-            if (hit) {
-              if (res.overlap > overlap) {
-                hits.push(obj)
-              }
-              res.clear()
-            }
-          })
+      if (this.quadTrees[index]) {
+        let objects = this.quadTrees[index].retrieve({x, y, width, height})
+        objects.forEach((obj) => {
+          if (obj.group !== 'tiles') return
           if (onlyOne && hits.length) return false
-        }
-      })
+          let hit = SAT.testPolygonPolygon(hitbox, obj.hitbox, res)
+          if (hit) {
+            let thing = this.layers.getIn([obj.layer, obj.group, obj.index])
+            if (!thing.get(property)) return
+            if (res.overlap > overlap) {
+              hits.push(obj)
+            }
+            res.clear()
+          }
+        })
+        if (onlyOne && hits.length) return false
+      }
     })
 
     return hits
