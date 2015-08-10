@@ -39,7 +39,7 @@
     "lodash": "^3.10.0",
     "pure-render-decorator": "^0.1.0",
     "react": "^0.13.3",
-    "react-hotkeys": "^0.3.3",
+    "react-hotkeys": "^0.4.0",
     "react-immutable-proptypes": "^1.1.0",
     "react-router": "^0.13.3",
     "sat": "^0.5.0"

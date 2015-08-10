@@ -44,7 +44,7 @@ class AppHandler extends React.Component {
 
   render () {
     return (
-      <HotKeys keyMap={AppHandler.hotKeyMap} handlers={AppHandler.hotKeyHandlers}>
+      <HotKeys focused={true} attach={window} keyMap={AppHandler.hotKeyMap} handlers={AppHandler.hotKeyHandlers}>
         <div className='handler--app'>
           <RouteHandler/>
           <img className='background' src='images/background.jpg'/>
